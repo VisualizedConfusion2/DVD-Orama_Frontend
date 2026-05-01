@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DVD-Orama</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+body {
+    height: 100%;
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  margin-bottom: 600px;
+  background: linear-gradient(
+    to bottom,
+    #696565,
+    #010101
+  );
+  background-repeat: no-repeat;
+}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #ffffff;
+    }
+    tr:nth-child(even) {
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>DVD-Orama</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Release Year</th>
+          <th>Streaming Service</th>
+          <th>EAN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Harry Potter 3: Fangen Fra Azkaban </td>
+          <td>2004</td>
+          <td>HBO</td>
+          <td>73219792844</td>
+        <!-- <tr v-for="(movie, index) in movies" :key="index">
+          <td>{{ movie.title }}</td>
+          <td>{{ movie.director }}</td>
+          <td>{{ movie.streamingLocations[0] }}</td>
+          <td>{{ movie.publication_year }}</td>-->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+<script src="index.js"></script>
+
+</body>
+</html>

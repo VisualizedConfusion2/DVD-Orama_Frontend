@@ -51,16 +51,16 @@ body {
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <!--<tr>
           <td>Harry Potter 3: Fangen Fra Azkaban </td>
           <td>2004</td>
           <td>HBO</td>
-          <td>73219792844</td>
-        <!-- <tr v-for="(movie, index) in movies" :key="index">
+          <td>73219792844</td>-->
+        <tr v-for="(movie, index) in movies" :key="index">
           <td>{{ movie.title }}</td>
-          <td>{{ movie.director }}</td>
-          <td>{{ movie.streamingLocations[0] }}</td>
-          <td>{{ movie.publication_year }}</td>-->
+          <td>{{ movie.description }}</td>
+          <td>{{ movie.duration }}</td>
+          <td>{{ movie.publicationYear }}</td>
         </tr>
       </tbody>
     </table>

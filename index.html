@@ -26,6 +26,7 @@
     <h2 v-if="UserName == null">Welcome, Guest</h2>
     <h2 v-else>Welcome, {{ UserName }}</h2>
     <button v-on:click="UserName = 'John Doe'">Set UserName</button>
+    <h3><ImageDisplay src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTERfmV8fgdV4aHIzg9N065NmQWVXAQqbKNmQ&s" /></h3>
     <table>
       <thead>
         <tr>
@@ -38,9 +39,9 @@
       </thead>
       <tbody>
         <tr v-for="(movie, index) in movies" :key="index">
-          <td>{{ movie.posterURL }}</td>
+          <td><ImageDisplay src="{{ movie.posterURL }}" /></td>
           <td>{{ movie.title }}</td>
-          <td>{{ movie.releaseYear }}</td>
+          <td>{{ movie.publicationYear }}</td>
           <td>{{ movie.duration }}</td>
           <td><button class="btn-primary" data-toggle="modal" data-target="#movieModal">Find Movie</button>
             <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel" aria-hidden="true">
@@ -66,6 +67,8 @@
     </table>
 
 <script src="index.js"></script>
-
+<script setup>
+import ImageDisplay from '@/components/ImageDisplay.vue'
+</script>
 </body>
 </html>

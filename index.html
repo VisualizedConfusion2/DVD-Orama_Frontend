@@ -38,10 +38,10 @@
       </thead>
       <tbody>
         <tr v-for="(movie, index) in movies" :key="index">
-          <td>{{ movie.PosterURL }}</td>
-          <td>{{ movie.Title }}</td>
-          <td>{{ movie.ReleaseYear }}</td>
-          <td>{{ movie.Duration }}</td>
+          <td>{{ movie.posterURL }}</td>
+          <td>{{ movie.title }}</td>
+          <td>{{ movie.releaseYear }}</td>
+          <td>{{ movie.duration }}</td>
           <td><button class="btn-primary" data-toggle="modal" data-target="#movieModal">Find Movie</button>
             <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">

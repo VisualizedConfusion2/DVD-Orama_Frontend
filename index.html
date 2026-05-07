@@ -5,66 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DVD-Orama</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Stylesheet.css">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <style>
-body {
-    height: 100%;
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  margin-bottom: 600px;
-  background: linear-gradient(
-    to bottom,
-    #696565,
-    #010101
-  );
-  background-repeat: no-repeat;
-}
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #ffffff;
-    }
-    tr:nth-child(even) {
-      background-color: #ffffff;
-    }
-  </style>
 </head>
 <body>
   <div id="app">
-    <h1>DVD-Orama</h1>
+    <div class="topbar">
+      <div class="brand">
+        DVD-Orama
+      </div>
+      <button class="signin-btn" type="button" @click="redirectToLogin">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
+        </svg>
+        sign in
+      </button>
+    </div>
+    <h2 v-if="UserName == null">Welcome, Guest</h2>
+    <h2 v-else>Welcome, {{ UserName }}</h2>
+    <button v-on:click="UserName = 'John Doe'">Set UserName</button>
     <table>
       <thead>
         <tr>
+          <th>Poster</th>
           <th>Title</th>
           <th>Release Year</th>
-          <th>Streaming Service</th>
-          <th>EAN</th>
+          <th>Duration</th>
+          <th>Find</th>
         </tr>
       </thead>
       <tbody>
-        <!--<tr>
-          <td>Harry Potter 3: Fangen Fra Azkaban </td>
-          <td>2004</td>
-          <td>HBO</td>
-          <td>73219792844</td>-->
         <tr v-for="(movie, index) in movies" :key="index">
+          <td>{{ movie.posterURL }}</td>
           <td>{{ movie.title }}</td>
-          <td>{{ movie.description }}</td>
+          <td>{{ movie.releaseYear }}</td>
           <td>{{ movie.duration }}</td>
-          <td>{{ movie.publicationYear }}</td>
+          <td><button class="btn-primary" data-toggle="modal" data-target="#movieModal">Find Movie</button>
+            <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <p>Some text in the modal.</p>
+                  </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
-  </div>
 
 <script src="index.js"></script>
 

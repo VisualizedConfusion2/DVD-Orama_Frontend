@@ -5,7 +5,7 @@ Vue.createApp({
         return{
             movies: [],
             movie: null,
-
+            UserName: null,
         }
     },
     async created() {console.log("Base URI in created hook:", baseUri+"movie") // <-- check the base URI in created hook
@@ -31,6 +31,6 @@ Vue.createApp({
             console.log(this.baseUri)
             console.log("ERROR:", ex);
         }
-    }
+    },
     }
 }).mount("#app")

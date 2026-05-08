@@ -133,8 +133,8 @@ p::after, li::after, blockquote::after, label::after {
  
 /* ── Typography ── */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-title);
-  color: var(--gold-light);
+  font-family: var(--font-label);
+  color: var(--gold);
   line-height: 1.15;
   letter-spacing: 0.02em;
   text-shadow: 0 2px 12px rgba(201,168,76,0.25);
@@ -880,8 +880,8 @@ tbody tr:hover {
  
 tbody td {
   padding: var(--gap-sm) var(--gap-md);
-  color: var(--cream);
-  font-family: var(--font-body);
+  color: var(--gold);
+  font-family: var(--font-label);
   font-size: 1.2rem;
   text-align: left;
 }
@@ -973,7 +973,6 @@ footer,
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 1.2rem;
     border-bottom: 1px solid rgba(217,180,106,0.22);
     margin-bottom: 2rem;
 }

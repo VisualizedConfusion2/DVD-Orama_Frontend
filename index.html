@@ -44,7 +44,7 @@
       </thead>
       <tbody>
         <tr v-for="(movie, index) in movies" :key="index">
-          <td><img :src="movie.posterURL" :alt="movie.title" width="80" /></td>
+          <td><img :src="movie.posterUrl" :alt="movie.title" width="80" /></td>
           <td>{{ movie.title }}</td>
           <td>{{ movie.publicationYear }}</td>
           <td>{{ movie.duration }} minutes</td>
@@ -52,7 +52,7 @@
             <!-- Bootstrap 4 uses data-toggle / data-target (no "bs-" prefix) -->
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
               :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
-              :data-poster="movie.posterURL">
+              :data-poster="movie.posterUrl">
               Find Movie
             </button>
           </td>

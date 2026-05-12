@@ -1,36 +1,43 @@
 const baseUri = "https://dvd-oramaservices-e5bfgqbse9g5edg7.swedencentral-01.azurewebsites.net/api/"
-console.log("Base URI:", baseUri) // <-- check the base URI
+console.log("Base URI:", baseUri)
+
 Vue.createApp({
-    data(){
-        return{
+    data() {
+        return {
             movies: [],
             movie: null,
             UserName: null,
+            loading: true,  // ← add this
         }
     },
-    async created() {console.log("Base URI in created hook:", baseUri+"movie") // <-- check the base URI in created hook
+    async created() {
+        console.log("Base URI in created hook:", baseUri + "movie")
         console.log("created method called")
-        this.getMovies(baseUri+"movie") // <-- check the URI being called
-
+        this.getMovies(baseUri + "movie")
     },
     methods: {
-            getAllMovies(){
-                this.getMovies(baseUri+"movie") // <-- check the URI being called
-            },
-            async getMovies(Uri) {
-        try {
-            const response = await axios.get(Uri);
-
-            console.log("RAW RESPONSE:", response);
-            console.log("DATA:", response.data);
-
-            this.movies = response.data;
-            console.log("MOVIES STATE:", this.movies);
-
-        } catch (ex) {
-            console.log(this.baseUri)
-            console.log("ERROR:", ex);
-        }
-    },
+        redirectToLogin() {
+            // add login redirect logic here
+        },
+        getAllMovies() {
+            this.getMovies(baseUri + "movie")
+        },
+        async getMovies(Uri) {
+            try {
+                const response = await axios.get(Uri);
+                console.log("RAW RESPONSE:", response);
+                console.log("DATA:", response.data);
+                this.movies = response.data;
+                this.loading = false;
+                console.log("MOVIES STATE:", this.movies);
+                // Log first movie so you can see the exact field names from the API
+                if (this.movies.length > 0) {
+                    console.log("FIRST MOVIE:", this.movies[0]);
+                    console.log("STREAMING LOCATIONS:", this.movies[0].streamingLocations);
+                }
+            } catch (ex) {
+                console.log("ERROR:", ex);
+            }
+        },
     }
 }).mount("#app")

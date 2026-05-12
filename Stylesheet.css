@@ -1011,3 +1011,15 @@ footer,
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+  /* Disable film grain overlay inside modal to prevent z-index interference */
+.modal p::after,
+.modal li::after,
+.modal h1::after,
+.modal h2::after,
+.modal h3::after,
+.modal h4::after,
+.modal h5::after,
+.modal h6::after,
+.modal label::after {
+  display: none;
+}

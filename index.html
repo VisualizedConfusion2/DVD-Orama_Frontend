@@ -18,7 +18,26 @@
       <div class="brand">
         DVD-Orama
       </div>
-      <button class="signin-btn" type="button" @click="redirectToLogin">
+      <!-- Logged in: show username + separate sign out button -->
+      <div v-if="UserName" class="topbar-actions">
+        <button class="signin-btn" type="button" @click="openSettings">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
+          </svg>
+          {{ UserName }}
+        </button>
+        <button class="signin-btn signout-btn" type="button" @click="redirectToLogin">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          sign out
+        </button>
+      </div>
+      <!-- Not logged in: single sign in button -->
+      <button v-else class="signin-btn" type="button" @click="redirectToLogin">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="8" r="4"></circle>
           <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
@@ -29,8 +48,6 @@
 
     <h2 v-if="UserName == null">Welcome, Guest</h2>
     <h2 v-else>Welcome, {{ UserName }}</h2>
-    <button v-on:click="UserName = 'John Doe'">Set UserName</button>
-     <h3><ImageDisplay src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTERfmV8fgdV4aHIzg9N065NmQWVXAQqbKNmQ&s" /></h3>
 
     <table>
       <thead>
@@ -92,6 +109,47 @@
       </div>
     </div>
 
+    <!-- User Settings Modal -->
+    <div v-if="showSettings" class="modal-backdrop" @click.self="showSettings = false">
+      <div class="modal-box" style="max-width:460px">
+        <h5 class="mb-4">Brugerindstillinger</h5>
+
+        <div class="form-group">
+          <label>Brugernavn</label>
+          <input v-model="settingsUsername" type="text" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>E-mail</label>
+          <input v-model="settingsEmail" type="email" class="form-control">
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          <label>Nyt password <span style="color:var(--film-silver);font-size:0.75rem">(lad stå tomt for at beholde nuværende)</span></label>
+          <input v-model="settingsNewPassword" type="password" class="form-control" placeholder="Nyt password">
+        </div>
+
+        <div class="form-group">
+          <label>Nuværende password <span style="color:var(--film-silver);font-size:0.75rem">(kræves ved ændring af email eller password)</span></label>
+          <input v-model="settingsCurrentPassword" type="password" class="form-control" placeholder="Dit nuværende password">
+        </div>
+
+        <p v-if="settingsError" class="text-danger">{{ settingsError }}</p>
+        <p v-if="settingsSuccess" class="text-success">{{ settingsSuccess }}</p>
+
+        <div style="display:flex;gap:0.75rem;margin-top:1rem">
+          <button @click="saveSettings" class="btn btn-primary" :disabled="settingsSaving">
+            {{ settingsSaving ? 'Gemmer…' : 'Gem ændringer' }}
+          </button>
+          <button @click="showSettings = false" class="btn" style="background:transparent;color:var(--film-silver);border:1px solid rgba(200,192,180,0.3)">
+            Annuller
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div><!-- end #app -->
 
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -103,7 +161,7 @@
 import ImageDisplay from '@/components/ImageDisplay.vue'
 </script>
   
-  <script src="index.js"></script>
+  <script type="module" src="index.js"></script>
   
   <!-- Populate modal with the clicked row's data before it opens -->
   <script>

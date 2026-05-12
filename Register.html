@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret bruger — DVD-Orama</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Stylesheet.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app" class="container mt-5" style="max-width:440px">
+        <h1 class="mb-1">Opret bruger</h1>
+        <p class="mb-4" style="color:var(--film-silver)">Allerede medlem? <a href="Log-in.html">Log ind</a></p>
+
+        <div class="form-group">
+            <label>Brugernavn</label>
+            <input v-model="username" type="text" class="form-control" placeholder="dit_brugernavn"
+                @blur="checkUsername">
+            <small v-if="usernameMsg" :class="usernameOk ? 'text-success' : 'text-danger'">{{ usernameMsg }}</small>
+        </div>
+        <div class="form-group">
+            <label>E-mail</label>
+            <input v-model="email" type="email" class="form-control" placeholder="du@eksempel.dk">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input v-model="password" type="password" class="form-control" placeholder="Min. 6 tegn">
+        </div>
+
+        <p v-if="error" class="text-danger">{{ error }}</p>
+        <p v-if="loading" style="color:var(--film-silver)">Opretter bruger…</p>
+
+        <button @click="register" class="btn btn-primary btn-block" :disabled="loading">Opret bruger</button>
+    </div>
+
+    <script type="module" src="Register.js"></script>
+</body>
+
+</html>

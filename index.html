@@ -33,11 +33,25 @@
     <!-- <h3><ImageDisplay src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTERfmV8fgdV4aHIzg9N065NmQWVXAQqbKNmQ&s" /></h3> -->
 <!-- Search Bar -->
 <div class="search-container">
+  <select v-model="selectedGenre" class="filter-select">
+    <option value="">All Genres</option>
+    <option v-for="genre in genres" :key="genre.id" :value="genre.name">
+      {{ genre.name }}
+    </option>
+  </select>
+
+  <select v-model="selectedService" class="filter-select">
+    <option value="">All Services</option>
+    <option v-for="service in streamingServices" :key="service" :value="service">
+      {{ service }}
+    </option>
+  </select>
+
   <div class="search-box">
-    <input 
-      type="text" 
-      v-model="searchTitle" 
-      class="search-input" 
+    <input
+      type="text"
+      v-model="searchTitle"
+      class="search-input"
       placeholder="Search by title..."
       @keyup.enter="searchMovies"
     />
@@ -48,8 +62,9 @@
       </svg>
     </button>
   </div>
+
   <button class="clear-btn" v-if="isSearching" @click="clearSearch">
-    ✕ clear search
+    ✕ clear
   </button>
 </div>
     <table>

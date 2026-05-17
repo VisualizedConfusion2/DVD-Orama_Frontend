@@ -31,7 +31,27 @@
     <h2 v-else>Welcome, {{ UserName }}</h2>
     <button v-on:click="UserName = 'John Doe'">Set UserName</button>
     <!-- <h3><ImageDisplay src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTERfmV8fgdV4aHIzg9N065NmQWVXAQqbKNmQ&s" /></h3> -->
-
+<!-- Search Bar -->
+<div class="search-container">
+  <div class="search-box">
+    <input 
+      type="text" 
+      v-model="searchTitle" 
+      class="search-input" 
+      placeholder="Search by title..."
+      @keyup.enter="searchMovies"
+    />
+    <button class="search-btn" @click="searchMovies">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+  </div>
+  <button class="clear-btn" v-if="isSearching" @click="clearSearch">
+    ✕ clear search
+  </button>
+</div>
     <table>
       <thead>
         <tr>

@@ -2,3 +2,4 @@
 
 # Firebase config with real keys — copy firebase-config.example.js to firebase-config.js and fill in values
 firebase-config.js
+firebase-config copy.js

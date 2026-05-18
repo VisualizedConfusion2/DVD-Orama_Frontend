@@ -1,17 +1,37 @@
-const baseUri = "https://dvd-oramaservices-e5bfgqbse9g5edg7.swedencentral-01.azurewebsites.net/api/"
+import { BASE_URL as baseUri } from "./api-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+    getAuth,
+    updateProfile,
+    updateEmail,
+    updatePassword,
+    reauthenticateWithCredential,
+    EmailAuthProvider
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
 
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
 Vue.createApp({
     data() {
         return {
             movies: [],
             movie: null,
-            UserName: null,
+            UserName: localStorage.getItem('username'),
             searchTitle: '',
+            showSettings: false,
             selectedGenre: '',
             selectedService: '',
             isSearching: false,
             genres: [],
             streamingServices: [],
+            settingsUsername: '',
+            settingsEmail: '',
+            settingsNewPassword: '',
+            settingsCurrentPassword: '',
+            settingsError: null,
+            settingsSuccess: null,
+            settingsSaving: false,
         }
     },
     async created() {
@@ -81,62 +101,6 @@ Vue.createApp({
             this.selectedService = '';
             this.isSearching = false;
             this.getMovies(baseUri + "movie");
-        }
-    }
-}).mount("#app")
-import { BASE_URL as baseUri } from "./api-config.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-    getAuth,
-    updateProfile,
-    updateEmail,
-    updatePassword,
-    reauthenticateWithCredential,
-    EmailAuthProvider
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { firebaseConfig } from "./firebase-config.js";
-
-const firebaseApp = initializeApp(firebaseConfig);
-const auth = getAuth(firebaseApp);
-
-Vue.createApp({
-    data() {
-        return {
-            movies: [],
-            movie: null,
-            UserName: localStorage.getItem('username'),
-            // Settings modal
-            showSettings: false,
-            settingsUsername: '',
-            settingsEmail: '',
-            settingsNewPassword: '',
-            settingsCurrentPassword: '',
-            settingsError: null,
-            settingsSuccess: null,
-            settingsSaving: false,
-        }
-    },
-    async created() {
-        if (!localStorage.getItem('token')) {
-            window.location.href = 'Log-in.html';
-            return;
-        }
-        this.getMovies(baseUri + "movie");
-    },
-    methods: {
-        getAllMovies() {
-            this.getMovies(baseUri + "movie");
-        },
-        async getMovies(Uri) {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(Uri, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                this.movies = response.data;
-            } catch (ex) {
-                console.log("ERROR:", ex);
-            }
         },
         redirectToLogin() {
             localStorage.removeItem('token');

@@ -1003,6 +1003,23 @@ footer,
 
   .signin-btn:hover { color: #fff; }
 
+  .topbar-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .signout-btn {
+    font-size: 1.1rem;
+    color: var(--film-silver);
+    opacity: 0.7;
+  }
+
+  .signout-btn:hover {
+    color: #fff;
+    opacity: 1;
+  }
+
   .signin-btn svg {
     width: 28px; height: 28px;
     stroke: currentColor;
@@ -1105,4 +1122,64 @@ footer,
 .filter-select option {
     background: #1a0a0a;
     color: var(--cream);
+
+/* ── Forgot-password modal ── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #1a0a0a;
+  border: 1px solid rgba(201,168,76,0.4);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+
+.modal-box h5 {
+  margin-bottom: 0.5rem;
+}
+
+/* ── Google Sign-In Button ── */
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0 16px;
+  height: 44px;
+  background: #fff;
+  color: #3c4043;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  text-transform: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.16);
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.google-btn:hover {
+  background: #f8f9fa;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.22);
+  transform: none;
+  color: #3c4043;
+}
+
+.google-btn__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }

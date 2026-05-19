@@ -43,7 +43,8 @@
 
 
         <h2>Collections</h2>
-        <div v-for="collection in MovieCollection">
+        <div v-for="collection in movieCollection" :key="collection.movieCollectionId">
+            <h3>{{ collection.name }}</h3>
             <table>
                 <thead>
                     <tr>
@@ -55,13 +56,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(movie, index) in movies" :key="index">
+                    <tr v-for="(movie, index) in collection.movies" :key="index">
                         <td><img :src="movie.posterUrl" :alt="movie.title" width="80" /></td>
                         <td>{{ movie.title }}</td>
                         <td>{{ movie.publicationYear }}</td>
                         <td>{{ movie.duration }} minutes</td>
                         <td>
-                            <!-- Bootstrap 4 uses data-toggle / data-target (no "bs-" prefix) -->
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#movieModal" :data-title="movie.title" :data-year="movie.publicationYear"
                                 :data-duration="movie.duration" :data-poster="movie.posterUrl"

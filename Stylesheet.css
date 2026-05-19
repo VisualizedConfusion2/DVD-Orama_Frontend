@@ -1122,7 +1122,7 @@ footer,
 .filter-select option {
     background: #1a0a0a;
     color: var(--cream);
-
+}
 /* ── Forgot-password modal ── */
 .modal-backdrop {
   position: fixed;
@@ -1182,4 +1182,26 @@ footer,
   width: 18px;
   height: 18px;
   flex-shrink: 0;
+}
+.year-input {
+    width: 80px;
+    background: rgba(10, 5, 5, 0.9);
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    color: var(--cream);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    padding: 0.6rem 0.5rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.year-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+}
+
+.year-input::placeholder {
+    color: rgba(201, 168, 76, 0.4);
+    font-style: italic;
 }

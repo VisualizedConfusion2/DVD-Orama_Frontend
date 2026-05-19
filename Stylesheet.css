@@ -896,16 +896,32 @@ footer, .cinema-footer {
   background: rgba(201,168,76,0.12);
   color: #c9a84c;
 }
-
-.suggestion-icon {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  stroke: #c9a84c;
-  opacity: 0.7;
+.filter-select {
+    width: auto; 
+    background: rgba(10, 5, 5, 0.9);
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    color: var(--cream);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    min-width: 130px;
 }
 
-/* ── Modals ── */
+.filter-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+}
+
+.filter-select option {
+    background: #1a0a0a;
+    color: var(--cream);
+}
+/* ── Forgot-password modal ── */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -958,17 +974,30 @@ footer, .cinema-footer {
   color: #3c4043;
 }
 
-.google-btn__icon { width: 18px; height: 18px; flex-shrink: 0; }
+.google-btn__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.year-input {
+    width: 80px;
+    background: rgba(10, 5, 5, 0.9);
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    color: var(--cream);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    padding: 0.6rem 0.5rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  :root {
-    --gap-lg: 2rem;
-    --gap-xl: 3.5rem;
-  }
+.year-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+}
 
-  .cinema-nav__links { gap: var(--gap-md); }
-  .cinema-curtains::before, .cinema-curtains::after { width: 24px; }
-  .cinema-screen { padding: var(--gap-lg) var(--gap-md); }
-  h4, h5, h6 { font-size: 0.75rem; }
+.year-input::placeholder {
+    color: rgba(201, 168, 76, 0.4);
+    font-style: italic;
 }

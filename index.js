@@ -23,6 +23,7 @@ Vue.createApp({
             showSettings: false,
             selectedGenre: '',
             selectedService: '',
+            selectedYear: null,
             isSearching: false,
             genres: [],
             streamingServices: [],
@@ -79,8 +80,9 @@ Vue.createApp({
             const hasTitle = this.searchTitle.trim();
             const hasGenre = this.selectedGenre;
             const hasService = this.selectedService;
+            const hasYear = this.selectedYear;
 
-            if (!hasTitle && !hasGenre && !hasService) {
+            if (!hasTitle && !hasGenre && !hasService && !hasYear) {
                 this.clearSearch();
                 return;
             }
@@ -90,6 +92,7 @@ Vue.createApp({
                 if (hasTitle)   params.title = this.searchTitle;
                 if (hasGenre)   params.genres = this.selectedGenre;
                 if (hasService) params.streamingServices = this.selectedService;
+                if (hasYear)    params.publicationYear = this.selectedYear;
 
                 const response = await axios.get(baseUri + "movie/search", { params });
                 this.movies = response.data;
@@ -107,6 +110,7 @@ Vue.createApp({
             this.selectedService = '';
             this.isSearching = false;
             this.getMovies(baseUri + "movie");
+            this.selectedYear = null;
         },
         async onTitleInput() {
             clearTimeout(this.suggestDebounce);

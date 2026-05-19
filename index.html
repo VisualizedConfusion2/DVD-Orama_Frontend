@@ -48,14 +48,23 @@
     <h2 v-if="UserName == null">Welcome, Guest</h2>
     <h2 v-else>Welcome, {{ UserName }}</h2>
     <!-- <h3><ImageDisplay src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTERfmV8fgdV4aHIzg9N065NmQWVXAQqbKNmQ&s" /></h3> -->
-  <!-- Search Bar -->
-  <div class="search-container">
-    <select v-model="selectedGenre" class="filter-select">
-      <option value="">All Genres</option>
-      <option v-for="genre in genres" :key="genre.id" :value="genre.name">
-        {{ genre.name }}
-      </option>
-    </select>
+<!-- Search Bar -->
+<div class="search-container">
+  <input
+    type="number"
+    v-model.number="selectedYear"
+    class="year-input"
+    placeholder="Year"
+    min="1888"
+    max="2026"
+    @keyup.enter="searchMovies"
+  />
+  <select v-model="selectedGenre" class="filter-select">
+    <option value="">All Genres</option>
+    <option v-for="genre in genres" :key="genre.id" :value="genre.name">
+      {{ genre.name }}
+    </option>
+  </select>
 
     <select v-model="selectedService" class="filter-select">
       <option value="">All Services</option>

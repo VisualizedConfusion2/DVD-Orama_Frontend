@@ -25,6 +25,11 @@ Vue.createApp({
             isSearching: false,
             genres: [],
             streamingServices: [],
+            // ADD THESE THREE:
+            suggestions: [],
+            activeSuggestion: -1,
+            suggestDebounce: null,
+            // rest of your settings fields...
             settingsUsername: '',
             settingsEmail: '',
             settingsNewPassword: '',
@@ -101,6 +106,50 @@ Vue.createApp({
             this.selectedService = '';
             this.isSearching = false;
             this.getMovies(baseUri + "movie");
+        },
+        async onTitleInput() {
+            clearTimeout(this.suggestDebounce);
+            const q = this.searchTitle.trim();
+            if (q.length < 2) {
+                this.suggestions = [];
+                return;
+            }
+            this.suggestDebounce = setTimeout(async () => {
+                try {
+                    const res = await axios.get(baseUri + 'movie/suggestions', {
+                        params: { query: q }
+                    });
+                    this.suggestions = res.data;
+                    this.activeSuggestion = -1;
+                } catch {
+                    this.suggestions = [];
+                }
+            }, 250);
+        },
+
+        selectSuggestion(title) {
+            this.searchTitle = title;
+            this.suggestions = [];
+            this.searchMovies();
+        },
+
+        hideSuggestions() {
+            setTimeout(() => { this.suggestions = []; }, 150);
+        },
+
+        onSuggestionKeydown(e) {
+            if (!this.suggestions.length) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                this.activeSuggestion = Math.min(this.activeSuggestion + 1, this.suggestions.length - 1);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                this.activeSuggestion = Math.max(this.activeSuggestion - 1, 0);
+            } else if (e.key === 'Enter' && this.activeSuggestion >= 0) {
+                this.selectSuggestion(this.suggestions[this.activeSuggestion]);
+            } else if (e.key === 'Escape') {
+                this.suggestions = [];
+            }
         },
         redirectToLogin() {
             localStorage.removeItem('token');

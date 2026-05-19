@@ -66,63 +66,84 @@
     </option>
   </select>
 
-  <select v-model="selectedService" class="filter-select">
-    <option value="">All Services</option>
-    <option v-for="service in streamingServices" :key="service" :value="service">
-      {{ service }}
-    </option>
-  </select>
+    <select v-model="selectedService" class="filter-select">
+      <option value="">All Services</option>
+      <option v-for="service in streamingServices" :key="service" :value="service">
+        {{ service }}
+      </option>
+    </select>
+    
 
-  <div class="search-box">
-    <input
-      type="text"
-      v-model="searchTitle"
-      class="search-input"
-      placeholder="Search by title..."
-      @keyup.enter="searchMovies"
-    />
-    <button class="search-btn" @click="searchMovies">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
+    <div class="search-box">
+      <input
+        type="text"
+        v-model="searchTitle"
+        class="search-input"
+        placeholder="Search by title..."
+        @keyup.enter="searchMovies"
+        @input="onTitleInput"
+        @keydown="onSuggestionKeydown"
+        @blur="hideSuggestions"
+        autocomplete="off"
+      />
+      <button class="search-btn" @click="searchMovies">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+
+      <!-- Suggestions dropdown — must be HERE inside search-box -->
+      <ul v-if="suggestions.length > 0" class="suggestions-dropdown">
+        <li
+          v-for="(s, i) in suggestions"
+          :key="i"
+          :class="['suggestion-item', { active: i === activeSuggestion }]"
+          @mousedown.prevent="selectSuggestion(s)"
+        >
+          <svg class="suggestion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>{{ s }}</span>
+        </li>
+      </ul>
+
+    </div>
+    
+
+    <button class="clear-btn" v-if="isSearching" @click="clearSearch">
+      ✕ clear
     </button>
   </div>
-
-  <button class="clear-btn" v-if="isSearching" @click="clearSearch">
-    ✕ clear
-  </button>
-</div>
-    <table>
-
-    <p v-if="loading" style="text-align:center; color:#c9a84c;">Loading movies...</p>
-    <table v-else>
-      <thead>
-        <tr>
-          <th>Poster</th>
-          <th>Title</th>
-          <th>Release Year</th>
-          <th>Duration</th>
-          <th>Find</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(movie, index) in movies" :key="index">
-          <td><img :src="movie.posterUrl" :alt="movie.title" width="80" /></td>
-          <td>{{ movie.title }}</td>
-          <td>{{ movie.publicationYear }}</td>
-          <td>{{ movie.duration }} minutes</td>
-          <td>
-            <!-- Bootstrap 4 uses data-toggle / data-target (no "bs-" prefix) -->
-             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
-              :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
-              :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)">
-              Find Movie
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <p v-if="loading" style="text-align:center; color:#c9a84c;">Loading movies...</p>
+      <table v-else>
+        <thead>
+          <tr>
+            <th>Poster</th>
+            <th>Title</th>
+            <th>Release Year</th>
+            <th>Duration</th>
+            <th>Find</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(movie, index) in movies" :key="index">
+            <td><img :src="movie.posterUrl" :alt="movie.title" width="80" /></td>
+            <td>{{ movie.title }}</td>
+            <td>{{ movie.publicationYear }}</td>
+            <td>{{ movie.duration }} minutes</td>
+            <td>
+              <!-- Bootstrap 4 uses data-toggle / data-target (no "bs-" prefix) -->
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
+                :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
+                :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)">
+                Find Movie
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
     <!-- ✅ Modal is now OUTSIDE the <table> so the DOM stays valid -->
 <!-- Modal outside #app to avoid Vue/Bootstrap DOM conflict -->
@@ -203,10 +224,6 @@
 
   <!-- Bootstrap 4 JS bundle (includes Popper) — required for modals to work -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script setup>
-import ImageDisplay from '@/components/ImageDisplay.vue'
-</script>
   
   <script type="module" src="index.js"></script>
   

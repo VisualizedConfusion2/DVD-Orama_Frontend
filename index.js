@@ -17,6 +17,7 @@ Vue.createApp({
         return {
             movies: [],
             movie: null,
+            loading: false,
             UserName: localStorage.getItem('username'),
             searchTitle: '',
             showSettings: false,
@@ -26,6 +27,11 @@ Vue.createApp({
             isSearching: false,
             genres: [],
             streamingServices: [],
+            // ADD THESE THREE:
+            suggestions: [],
+            activeSuggestion: -1,
+            suggestDebounce: null,
+            // rest of your settings fields...
             settingsUsername: '',
             settingsEmail: '',
             settingsNewPassword: '',
@@ -105,6 +111,53 @@ Vue.createApp({
             this.isSearching = false;
             this.getMovies(baseUri + "movie");
             this.selectedYear = null;
+        },
+        async onTitleInput() {
+            clearTimeout(this.suggestDebounce);
+            const q = this.searchTitle.trim();
+            if (q.length < 2) {
+                this.suggestions = [];
+                return;
+            }
+            const self = this;
+            this.suggestDebounce = setTimeout(async () => {
+                try {
+                    const res = await axios.get(baseUri + 'movie/suggestions', {
+                        params: { query: q }
+                    });
+                    console.log('suggestions:', res.data);
+                    self.suggestions = res.data;
+                    self.activeSuggestion = -1;
+                } catch (e) {
+                    console.log('error:', e);
+                    self.suggestions = [];
+                }
+            }, 250);
+        },
+
+        selectSuggestion(title) {
+            this.searchTitle = title;
+            this.suggestions = [];
+            this.searchMovies();
+        },
+
+        hideSuggestions() {
+            setTimeout(() => { this.suggestions = []; }, 400);
+        },
+
+        onSuggestionKeydown(e) {
+            if (!this.suggestions.length) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                this.activeSuggestion = Math.min(this.activeSuggestion + 1, this.suggestions.length - 1);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                this.activeSuggestion = Math.max(this.activeSuggestion - 1, 0);
+            } else if (e.key === 'Enter' && this.activeSuggestion >= 0) {
+                this.selectSuggestion(this.suggestions[this.activeSuggestion]);
+            } else if (e.key === 'Escape') {
+                this.suggestions = [];
+            }
         },
         redirectToLogin() {
             localStorage.removeItem('token');

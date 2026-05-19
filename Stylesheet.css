@@ -3,56 +3,50 @@
    Aesthetic: Golden Age of Cinema — velvet curtains, film grain,
    marquee lights, and the warm glow of a silver screen
    ============================================================ */
- 
+
 /* ── Google Fonts ── */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Josefin+Sans:wght@100;300;400;600&display=swap');
- 
+
 /* ── CSS Variables ── */
 :root {
-  /* Palette */
-  --cinema-black:       #0a0705;
-  --curtain-red:        #8b1a1a;
-  --curtain-deep:       #5c0f0f;
-  --curtain-shadow:     #3a0808;
-  --gold:               #c9a84c;
-  --gold-light:         #e8c96b;
-  --gold-pale:          #f5e4a8;
-  --cream:              #f0e8d5;
-  --ivory:              #faf6ed;
-  --warm-white:         #fff8ee;
-  --marquee-yellow:     #ffe566;
-  --screen-glow:        #e8dfc7;
-  --film-silver:        #c8c0b4;
- 
-  /* Typography */
-  --font-title:         'Playfair Display', Georgia, serif;
-  --font-body:          'Cormorant Garamond', 'Times New Roman', serif;
-  --font-label:         'Josefin Sans', 'Futura', sans-serif;
- 
-  /* Spacing */
-  --gap-xs:  0.4rem;
-  --gap-sm:  0.8rem;
-  --gap-md:  1.6rem;
-  --gap-lg:  3.2rem;
-  --gap-xl:  6.4rem;
- 
-  /* Film grain overlay opacity */
-  --grain-opacity: 0.04;
+  --cinema-black:    #0a0705;
+  --curtain-red:     #8b1a1a;
+  --curtain-deep:    #5c0f0f;
+  --curtain-shadow:  #3a0808;
+  --gold:            #c9a84c;
+  --gold-light:      #e8c96b;
+  --gold-pale:       #f5e4a8;
+  --cream:           #f0e8d5;
+  --ivory:           #faf6ed;
+  --warm-white:      #fff8ee;
+  --marquee-yellow:  #ffe566;
+  --screen-glow:     #e8dfc7;
+  --film-silver:     #c8c0b4;
+
+  --font-title: 'Playfair Display', Georgia, serif;
+  --font-body:  'Cormorant Garamond', 'Times New Roman', serif;
+  --font-label: 'Josefin Sans', 'Futura', sans-serif;
+
+  --gap-xs: 0.4rem;
+  --gap-sm: 0.8rem;
+  --gap-md: 1.6rem;
+  --gap-lg: 3.2rem;
+  --gap-xl: 6.4rem;
 }
- 
+
 /* ── Reset & Base ── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
- 
+
 html {
   font-size: 16px;
   scroll-behavior: smooth;
 }
- 
-/* ── Body — velvet curtain theatre ── */
+
+/* ── Body ── */
 body {
   text-align: center;
   background-color: var(--curtain-deep);
@@ -63,13 +57,6 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   cursor: default;
- 
-  /*
-   * Layered curtain background:
-   * 1. Radial vignettes darken the edges like a stage spotlight
-   * 2. Repeating vertical gradient simulates gathered velvet fabric folds
-   * 3. A subtle diagonal weave adds cloth texture depth
-   */
   background-image:
     radial-gradient(ellipse at 50% 0%,    rgba(180,40,40,0.35) 0%,  transparent 60%),
     radial-gradient(ellipse at 50% 100%,  rgba(40,5,5,0.7)     0%,  transparent 55%),
@@ -91,18 +78,18 @@ body {
     ),
     repeating-linear-gradient(
       160deg,
-      transparent              0px,
-      transparent              6px,
-      rgba(255,255,255,0.012)  6px,
-      rgba(255,255,255,0.012)  7px
+      transparent             0px,
+      transparent             6px,
+      rgba(255,255,255,0.012) 6px,
+      rgba(255,255,255,0.012) 7px
     );
 }
- 
-/* ── Film grain on text elements only ── */
+
+/* ── Film grain on text elements ── */
 h1, h2, h3, h4, h5, h6, p, li, blockquote, label {
   position: relative;
 }
- 
+
 h1::after, h2::after, h3::after, h4::after, h5::after, h6::after,
 p::after, li::after, blockquote::after, label::after {
   content: '';
@@ -116,7 +103,7 @@ p::after, li::after, blockquote::after, label::after {
   animation: grain 0.5s steps(1) infinite;
   mix-blend-mode: overlay;
 }
- 
+
 @keyframes grain {
   0%   { background-position:   0px   0px; }
   10%  { background-position: -50px -50px; }
@@ -130,7 +117,7 @@ p::after, li::after, blockquote::after, label::after {
   90%  { background-position: -50px  50px; }
   100% { background-position:   0px   0px; }
 }
- 
+
 /* ── Typography ── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-label);
@@ -139,26 +126,26 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.02em;
   text-shadow: 0 2px 12px rgba(201,168,76,0.25);
 }
- 
+
 h1 {
   font-size: clamp(1.8rem, 6vw, 4.5rem);
   font-weight: 900;
   font-style: italic;
   letter-spacing: -0.01em;
 }
- 
+
 h2 {
   font-size: clamp(1rem, 3vw, 2.5rem);
   font-weight: 700;
   margin-bottom: var(--gap-sm);
 }
- 
+
 h3 {
   font-size: clamp(1.4rem, 2.5vw, 2.2rem);
   font-weight: 400;
   font-style: italic;
 }
- 
+
 h4, h5, h6 {
   font-family: var(--font-label);
   text-transform: uppercase;
@@ -167,35 +154,28 @@ h4, h5, h6 {
   color: var(--gold);
   font-size: 0.85rem;
 }
- 
+
 p {
   font-size: 1.125rem;
   color: var(--cream);
   margin-bottom: var(--gap-md);
 }
- 
-em, i {
-  font-style: italic;
-  color: var(--gold-pale);
-}
- 
-strong, b {
-  font-weight: 700;
-  color: var(--warm-white);
-}
- 
+
+em, i { font-style: italic; color: var(--gold-pale); }
+strong, b { font-weight: 700; color: var(--warm-white); }
+
 a {
   color: var(--gold);
   text-decoration: none;
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
- 
+
 a:hover {
   color: var(--gold-light);
   text-shadow: 0 0 12px rgba(232,201,107,0.5);
 }
- 
-/* ── Marquee Header / Hero ── */
+
+/* ── Marquee Header ── */
 .cinema-marquee {
   position: relative;
   width: 100%;
@@ -206,8 +186,7 @@ a:hover {
   text-align: center;
   overflow: hidden;
 }
- 
-/* Marquee bulb lights top */
+
 .cinema-marquee::before {
   content: '• • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •';
   display: block;
@@ -217,14 +196,11 @@ a:hover {
   font-size: 0.65rem;
   letter-spacing: 0.35em;
   color: var(--marquee-yellow);
-  text-shadow:
-    0 0 6px var(--marquee-yellow),
-    0 0 14px rgba(255,229,102,0.6);
+  text-shadow: 0 0 6px var(--marquee-yellow), 0 0 14px rgba(255,229,102,0.6);
   overflow: hidden;
   animation: bulb-flicker 3s ease-in-out infinite alternate;
 }
- 
-/* Marquee bulb lights bottom */
+
 .cinema-marquee::after {
   content: '• • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •';
   display: block;
@@ -234,15 +210,12 @@ a:hover {
   font-size: 0.65rem;
   letter-spacing: 0.35em;
   color: var(--marquee-yellow);
-  text-shadow:
-    0 0 6px var(--marquee-yellow),
-    0 0 14px rgba(255,229,102,0.6);
+  text-shadow: 0 0 6px var(--marquee-yellow), 0 0 14px rgba(255,229,102,0.6);
   overflow: hidden;
   animation: bulb-flicker 3s ease-in-out infinite alternate-reverse;
-  /* Prevent grain overlay collision */
   z-index: 1;
 }
- 
+
 @keyframes bulb-flicker {
   0%   { opacity: 1; }
   85%  { opacity: 1; }
@@ -251,7 +224,7 @@ a:hover {
   95%  { opacity: 0.7; }
   100% { opacity: 1; }
 }
- 
+
 .cinema-marquee__title {
   font-family: var(--font-title);
   font-size: clamp(3rem, 8vw, 7rem);
@@ -265,12 +238,12 @@ a:hover {
   display: block;
   animation: title-glow 4s ease-in-out infinite alternate;
 }
- 
+
 @keyframes title-glow {
   from { text-shadow: 0 0 20px rgba(255,229,102,0.8), 0 0 60px rgba(255,229,102,0.3), 2px 2px 0 var(--curtain-deep); }
   to   { text-shadow: 0 0 30px rgba(255,229,102,1),   0 0 90px rgba(255,229,102,0.5), 2px 2px 0 var(--curtain-deep); }
 }
- 
+
 .cinema-marquee__subtitle {
   font-family: var(--font-label);
   font-size: 0.8rem;
@@ -279,45 +252,33 @@ a:hover {
   color: var(--gold);
   margin-top: var(--gap-sm);
 }
- 
+
 /* ── Curtain Sidebar Panels ── */
-.cinema-curtains {
-  position: relative;
-}
- 
+.cinema-curtains { position: relative; }
+
 .cinema-curtains::before,
 .cinema-curtains::after {
   content: '';
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 0; bottom: 0;
   width: 60px;
   z-index: 10;
   pointer-events: none;
 }
- 
+
 .cinema-curtains::before {
   left: 0;
-  background: linear-gradient(to right,
-    var(--curtain-deep) 0%,
-    var(--curtain-red) 40%,
-    transparent 100%
-  );
-  /* Fabric fold lines */
+  background: linear-gradient(to right, var(--curtain-deep) 0%, var(--curtain-red) 40%, transparent 100%);
   box-shadow: inset -10px 0 20px rgba(0,0,0,0.4);
 }
- 
+
 .cinema-curtains::after {
   right: 0;
-  background: linear-gradient(to left,
-    var(--curtain-deep) 0%,
-    var(--curtain-red) 40%,
-    transparent 100%
-  );
+  background: linear-gradient(to left, var(--curtain-deep) 0%, var(--curtain-red) 40%, transparent 100%);
   box-shadow: inset 10px 0 20px rgba(0,0,0,0.4);
 }
- 
-/* ── Screen / Feature Presentation panel ── */
+
+/* ── Screen Panel ── */
 .cinema-screen {
   position: relative;
   background: var(--screen-glow);
@@ -325,23 +286,17 @@ a:hover {
   padding: var(--gap-xl) var(--gap-lg);
   text-align: center;
   overflow: hidden;
- 
-  /* Screen projection glow */
-  box-shadow:
-    0 0 60px 20px rgba(232,223,199,0.15),
-    0 0 140px 60px rgba(232,223,199,0.05);
+  box-shadow: 0 0 60px 20px rgba(232,223,199,0.15), 0 0 140px 60px rgba(232,223,199,0.05);
 }
- 
+
 .cinema-screen::before {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at 50% -10%, rgba(255,255,240,0.5) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% -10%, rgba(255,255,240,0.5) 0%, transparent 60%);
   pointer-events: none;
 }
- 
-/* Sprocket holes decoration on screen edge */
+
 .cinema-screen::after {
   content: '';
   position: absolute;
@@ -350,27 +305,16 @@ a:hover {
   width: 18px;
   background-image: repeating-linear-gradient(
     to bottom,
-    transparent 0px,
-    transparent 12px,
-    rgba(0,0,0,0.15) 12px,
-    rgba(0,0,0,0.15) 22px
+    transparent 0px, transparent 12px,
+    rgba(0,0,0,0.15) 12px, rgba(0,0,0,0.15) 22px
   );
 }
- 
-.cinema-screen h1,
-.cinema-screen h2,
-.cinema-screen h3 {
-  color: var(--cinema-black);
-  text-shadow: none;
-}
- 
-.cinema-screen p {
-  color: #2a1f14;
-}
- 
+
+.cinema-screen h1, .cinema-screen h2, .cinema-screen h3 { color: var(--cinema-black); text-shadow: none; }
+.cinema-screen p { color: #2a1f14; }
+
 /* ── Navigation ── */
-nav,
-.cinema-nav {
+nav, .cinema-nav {
   background: rgba(30,5,5,0.75);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid rgba(201,168,76,0.3);
@@ -380,7 +324,7 @@ nav,
   justify-content: space-between;
   gap: var(--gap-md);
 }
- 
+
 .cinema-nav__logo {
   font-family: var(--font-title);
   font-size: 1.5rem;
@@ -390,14 +334,9 @@ nav,
   text-shadow: 0 0 12px rgba(201,168,76,0.4);
   white-space: nowrap;
 }
- 
-.cinema-nav__links {
-  list-style: none;
-  display: flex;
-  gap: var(--gap-lg);
-  align-items: center;
-}
- 
+
+.cinema-nav__links { list-style: none; display: flex; gap: var(--gap-lg); align-items: center; }
+
 .cinema-nav__links a {
   font-family: var(--font-label);
   font-size: 0.7rem;
@@ -406,14 +345,14 @@ nav,
   color: var(--film-silver);
   transition: color 0.3s, letter-spacing 0.3s;
 }
- 
+
 .cinema-nav__links a:hover {
   color: var(--gold-light);
   letter-spacing: 0.3em;
   text-shadow: 0 0 8px rgba(232,201,107,0.5);
 }
- 
-/* ── Cards — Movie Posters ── */
+
+/* ── Cards ── */
 .cinema-card {
   position: relative;
   background: #14100c;
@@ -422,60 +361,30 @@ nav,
   transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
   cursor: pointer;
 }
- 
+
 .cinema-card:hover {
   transform: translateY(-6px) scale(1.015);
-  box-shadow:
-    0 20px 50px rgba(0,0,0,0.7),
-    0 0 30px rgba(201,168,76,0.15);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(201,168,76,0.15);
   border-color: rgba(201,168,76,0.5);
 }
- 
-/* Gold corner ornaments */
-.cinema-card::before,
-.cinema-card::after {
+
+.cinema-card::before, .cinema-card::after {
   content: '';
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 20px; height: 20px;
   pointer-events: none;
   z-index: 2;
   transition: width 0.3s, height 0.3s;
 }
- 
-.cinema-card::before {
-  top: 6px; left: 6px;
-  border-top: 2px solid var(--gold);
-  border-left: 2px solid var(--gold);
-}
- 
-.cinema-card::after {
-  bottom: 6px; right: 6px;
-  border-bottom: 2px solid var(--gold);
-  border-right: 2px solid var(--gold);
-}
- 
-.cinema-card:hover::before,
-.cinema-card:hover::after {
-  width: 28px;
-  height: 28px;
-}
- 
-.cinema-card__image {
-  width: 100%;
-  display: block;
-  filter: sepia(20%) contrast(1.05);
-  transition: filter 0.4s ease;
-}
- 
-.cinema-card:hover .cinema-card__image {
-  filter: sepia(0%) contrast(1.1);
-}
- 
-.cinema-card__body {
-  padding: var(--gap-md);
-}
- 
+
+.cinema-card::before { top: 6px; left: 6px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+.cinema-card::after  { bottom: 6px; right: 6px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+.cinema-card:hover::before, .cinema-card:hover::after { width: 28px; height: 28px; }
+
+.cinema-card__image { width: 100%; display: block; filter: sepia(20%) contrast(1.05); transition: filter 0.4s ease; }
+.cinema-card:hover .cinema-card__image { filter: sepia(0%) contrast(1.1); }
+.cinema-card__body { padding: var(--gap-md); }
+
 .cinema-card__label {
   font-family: var(--font-label);
   font-size: 0.65rem;
@@ -484,7 +393,7 @@ nav,
   color: var(--gold);
   margin-bottom: var(--gap-xs);
 }
- 
+
 .cinema-card__title {
   font-family: var(--font-title);
   font-size: 1.4rem;
@@ -494,17 +403,11 @@ nav,
   margin-bottom: var(--gap-xs);
   text-shadow: none;
 }
- 
-.cinema-card__meta {
-  font-family: var(--font-label);
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  color: var(--film-silver);
-}
- 
+
+.cinema-card__meta { font-family: var(--font-label); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--film-silver); }
+
 /* ── Buttons ── */
-.btn,
-button {
+.btn, button {
   font-family: var(--font-label);
   font-size: 0.72rem;
   letter-spacing: 0.3em;
@@ -519,60 +422,43 @@ button {
   margin-top: 0.2rem;
   margin-bottom: 0.3rem;
 }
- 
-/* Primary — Gold ticket button */
-.btn-primary,
-button[type="submit"] {
+
+.btn-primary, button[type="submit"] {
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
   color: var(--cinema-black);
   font-weight: 600;
   box-shadow: 0 4px 20px rgba(201,168,76,0.35);
 }
- 
-.btn-primary:hover,
-button[type="submit"]:hover {
+
+.btn-primary:hover, button[type="submit"]:hover {
   background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-pale) 50%, var(--gold-light) 100%);
   box-shadow: 0 6px 30px rgba(201,168,76,0.55);
   color: var(--cinema-black);
   transform: translateY(-2px);
 }
- 
-/* Shimmer sweep on hover */
-.btn-primary::after,
-button[type="submit"]::after {
+
+.btn-primary::after, button[type="submit"]::after {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -75%;
-  width: 50%;
-  height: 200%;
+  top: -50%; left: -75%;
+  width: 50%; height: 200%;
   background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
   transform: skewX(-20deg);
   transition: left 0.5s ease;
 }
- 
-.btn-primary:hover::after,
-button[type="submit"]:hover::after {
-  left: 150%;
-}
- 
-/* Ghost / outline button */
-.btn-ghost {
-  background: transparent;
-  color: var(--gold);
-  border: 1px solid var(--gold);
-}
- 
+
+.btn-primary:hover::after, button[type="submit"]:hover::after { left: 150%; }
+
+.btn-ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
 .btn-ghost:hover {
   background: rgba(201,168,76,0.08);
   color: var(--gold-light);
   border-color: var(--gold-light);
   box-shadow: 0 0 20px rgba(201,168,76,0.2);
 }
- 
-/* ── Dividers — Film Strip ── */
-hr,
-.divider {
+
+/* ── Dividers ── */
+hr, .divider {
   border: none;
   height: 1px;
   background: linear-gradient(to right, transparent, var(--gold), transparent);
@@ -580,8 +466,7 @@ hr,
   max-width: 600px;
   opacity: 0.5;
 }
- 
-/* Ornamental divider */
+
 .divider-ornate {
   display: flex;
   align-items: center;
@@ -589,25 +474,11 @@ hr,
   margin: var(--gap-lg) 0;
   color: var(--gold);
 }
- 
-.divider-ornate::before,
-.divider-ornate::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--gold));
-}
- 
-.divider-ornate::after {
-  background: linear-gradient(to left, transparent, var(--gold));
-}
- 
-.divider-ornate__icon {
-  font-size: 1.2rem;
-  color: var(--gold);
-  text-shadow: 0 0 8px rgba(201,168,76,0.5);
-}
- 
+
+.divider-ornate::before, .divider-ornate::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold)); }
+.divider-ornate::after { background: linear-gradient(to left, transparent, var(--gold)); }
+.divider-ornate__icon { font-size: 1.2rem; color: var(--gold); text-shadow: 0 0 8px rgba(201,168,76,0.5); }
+
 /* ── Film Strip Decoration ── */
 .film-strip {
   display: flex;
@@ -618,28 +489,23 @@ hr,
   overflow: hidden;
   position: relative;
 }
- 
+
 .film-strip::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      to right,
-      transparent 0px,
-      transparent 20px,
-      rgba(255,255,255,0.04) 20px,
-      rgba(255,255,255,0.04) 22px
-    );
+  background-image: repeating-linear-gradient(
+    to right, transparent 0px, transparent 20px,
+    rgba(255,255,255,0.04) 20px, rgba(255,255,255,0.04) 22px
+  );
   animation: filmroll 6s linear infinite;
 }
- 
+
 @keyframes filmroll {
   from { background-position-x: 0; }
   to   { background-position-x: 44px; }
 }
- 
-/* Sprocket holes in film strip */
+
 .film-strip::after {
   content: '◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻ ◻';
   position: absolute;
@@ -652,51 +518,31 @@ hr,
   padding-left: 6px;
   animation: filmroll 6s linear infinite;
 }
- 
+
 /* ── Sections ── */
-section,
-.cinema-section {
-  padding: var(--gap-xl) var(--gap-lg);
-  max-width: 1200px;
-  margin: 0 auto;
-}
- 
-.cinema-section--dark {
-  background: #0d0907;
-}
- 
+section, .cinema-section { padding: var(--gap-xl) var(--gap-lg); max-width: 1200px; margin: 0 auto; }
+.cinema-section--dark { background: #0d0907; }
+
 .cinema-section--curtain {
-  background:
-    linear-gradient(to bottom,
-      var(--curtain-shadow) 0%,
-      var(--curtain-deep) 20%,
-      var(--curtain-red) 50%,
-      var(--curtain-deep) 80%,
-      var(--curtain-shadow) 100%
-    );
+  background: linear-gradient(to bottom, var(--curtain-shadow) 0%, var(--curtain-deep) 20%, var(--curtain-red) 50%, var(--curtain-deep) 80%, var(--curtain-shadow) 100%);
   position: relative;
   overflow: hidden;
 }
- 
-/* Curtain fold lines */
+
 .cinema-section--curtain::before {
   content: '';
   position: absolute;
   inset: 0;
   background-image: repeating-linear-gradient(
     to right,
-    transparent 0px,
-    transparent 48px,
-    rgba(0,0,0,0.15) 48px,
-    rgba(0,0,0,0.15) 52px,
-    transparent 52px,
-    transparent 80px,
-    rgba(255,255,255,0.02) 80px,
-    rgba(255,255,255,0.02) 82px
+    transparent 0px, transparent 48px,
+    rgba(0,0,0,0.15) 48px, rgba(0,0,0,0.15) 52px,
+    transparent 52px, transparent 80px,
+    rgba(255,255,255,0.02) 80px, rgba(255,255,255,0.02) 82px
   );
   pointer-events: none;
 }
- 
+
 /* ── Ticket / Badge ── */
 .cinema-ticket {
   display: inline-flex;
@@ -708,76 +554,40 @@ section,
   position: relative;
   font-family: var(--font-label);
 }
- 
-/* Perforation hole left */
+
 .cinema-ticket::before {
   content: '';
   position: absolute;
-  left: -1px;
-  top: 50%;
+  left: -1px; top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
+  width: 16px; height: 16px;
   background: var(--cinema-black);
   border-radius: 50%;
   border: 1px solid var(--gold);
   margin-left: -8px;
 }
- 
-/* Perforation hole right */
+
 .cinema-ticket::after {
   content: '';
   position: absolute;
-  right: -9px;
-  top: 50%;
+  right: -9px; top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
+  width: 16px; height: 16px;
   background: var(--cinema-black);
   border-radius: 50%;
   border: 1px solid var(--gold);
 }
- 
-.cinema-ticket__number {
-  font-size: 2rem;
-  font-family: var(--font-title);
-  font-weight: 900;
-  color: var(--gold-light);
-  letter-spacing: -0.02em;
-}
- 
-.cinema-ticket__info {
-  border-left: 1px dashed rgba(201,168,76,0.4);
-  padding-left: var(--gap-md);
-}
- 
-.cinema-ticket__label {
-  font-size: 0.6rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--film-silver);
-}
- 
-.cinema-ticket__value {
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--cream);
-}
- 
+
+.cinema-ticket__number { font-size: 2rem; font-family: var(--font-title); font-weight: 900; color: var(--gold-light); letter-spacing: -0.02em; }
+.cinema-ticket__info { border-left: 1px dashed rgba(201,168,76,0.4); padding-left: var(--gap-md); }
+.cinema-ticket__label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--film-silver); }
+.cinema-ticket__value { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cream); }
+
 /* ── Rating Stars ── */
-.cinema-stars {
-  color: var(--gold);
-  font-size: 1rem;
-  letter-spacing: 0.1em;
-  text-shadow: 0 0 8px rgba(201,168,76,0.5);
-}
- 
+.cinema-stars { color: var(--gold); font-size: 1rem; letter-spacing: 0.1em; text-shadow: 0 0 8px rgba(201,168,76,0.5); }
+
 /* ── Forms & Inputs ── */
-input,
-textarea,
-select {
+input, textarea, select {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(201,168,76,0.3);
   color: var(--cream);
@@ -788,20 +598,14 @@ select {
   outline: none;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
- 
-input:focus,
-textarea:focus,
-select:focus {
+
+input:focus, textarea:focus, select:focus {
   border-color: var(--gold);
   box-shadow: 0 0 0 3px rgba(201,168,76,0.12), 0 0 20px rgba(201,168,76,0.08);
 }
- 
-input::placeholder,
-textarea::placeholder {
-  color: rgba(200,192,180,0.4);
-  font-style: italic;
-}
- 
+
+input::placeholder, textarea::placeholder { color: rgba(200,192,180,0.4); font-style: italic; }
+
 label {
   font-family: var(--font-label);
   font-size: 0.65rem;
@@ -811,8 +615,8 @@ label {
   display: block;
   margin-bottom: var(--gap-xs);
 }
- 
-/* ── Blockquote — Critic's Review ── */
+
+/* ── Blockquote ── */
 blockquote {
   border-left: 3px solid var(--gold);
   padding: var(--gap-md) var(--gap-lg);
@@ -820,7 +624,7 @@ blockquote {
   background: rgba(201,168,76,0.04);
   position: relative;
 }
- 
+
 blockquote::before {
   content: '\201C';
   font-family: var(--font-title);
@@ -829,17 +633,11 @@ blockquote::before {
   color: var(--gold);
   opacity: 0.3;
   position: absolute;
-  top: -10px;
-  left: 16px;
+  top: -10px; left: 16px;
 }
- 
-blockquote p {
-  font-size: 1.25rem;
-  font-style: italic;
-  color: var(--ivory);
-  margin: 0;
-}
- 
+
+blockquote p { font-size: 1.25rem; font-style: italic; color: var(--ivory); margin: 0; }
+
 blockquote cite {
   display: block;
   margin-top: var(--gap-sm);
@@ -850,14 +648,10 @@ blockquote cite {
   color: var(--gold);
   font-style: normal;
 }
- 
+
 /* ── Tables ── */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-}
- 
+table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+
 thead th {
   font-family: var(--font-label);
   font-size: 1rem;
@@ -868,16 +662,10 @@ thead th {
   border-bottom: 1px solid var(--gold);
   text-align: left;
 }
- 
-tbody tr {
-  border-bottom: 1px solid rgba(201,168,76,0.1);
-  transition: background 0.2s;
-}
- 
-tbody tr:hover {
-  background: rgba(201,168,76,0.05);
-}
- 
+
+tbody tr { border-bottom: 1px solid rgba(201,168,76,0.1); transition: background 0.2s; }
+tbody tr:hover { background: rgba(201,168,76,0.05); }
+
 tbody td {
   padding: var(--gap-sm) var(--gap-md);
   color: var(--gold);
@@ -885,10 +673,9 @@ tbody td {
   font-size: 1.2rem;
   text-align: left;
 }
- 
+
 /* ── Footer ── */
-footer,
-.cinema-footer {
+footer, .cinema-footer {
   background: rgba(20,3,3,0.85);
   border-top: 1px solid rgba(201,168,76,0.2);
   padding: var(--gap-xl) var(--gap-lg) var(--gap-lg);
@@ -899,7 +686,7 @@ footer,
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
- 
+
 .cinema-footer__logo {
   font-family: var(--font-title);
   font-size: 2.2rem;
@@ -910,21 +697,19 @@ footer,
   margin-bottom: var(--gap-md);
   text-shadow: 0 0 20px rgba(201,168,76,0.3);
 }
- 
+
 /* ── Utility Classes ── */
-.text-gold     { color: var(--gold-light) !important; }
-.text-cream    { color: var(--cream) !important; }
-.text-silver   { color: var(--film-silver) !important; }
-.text-center   { text-align: center; }
-.text-label    { font-family: var(--font-label); font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; }
-.text-italic   { font-style: italic; }
- 
-.bg-dark       { background-color: var(--cinema-black); }
-.bg-curtain    { background-color: var(--curtain-red); }
- 
-.gold-border   { border: 1px solid rgba(201,168,76,0.35); }
-.gold-rule     { border-top: 1px solid rgba(201,168,76,0.35); }
- 
+.text-gold   { color: var(--gold-light) !important; }
+.text-cream  { color: var(--cream) !important; }
+.text-silver { color: var(--film-silver) !important; }
+.text-center { text-align: center; }
+.text-label  { font-family: var(--font-label); font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; }
+.text-italic { font-style: italic; }
+.bg-dark     { background-color: var(--cinema-black); }
+.bg-curtain  { background-color: var(--curtain-red); }
+.gold-border { border: 1px solid rgba(201,168,76,0.35); }
+.gold-rule   { border-top: 1px solid rgba(201,168,76,0.35); }
+
 .visually-hidden {
   position: absolute;
   width: 1px; height: 1px;
@@ -932,171 +717,184 @@ footer,
   clip: rect(0,0,0,0);
   white-space: nowrap;
 }
- 
-/* ── Fade-in on load ── */
+
+/* ── Animations ── */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
- 
-.fade-up {
-  animation: fade-up 0.8s cubic-bezier(0.23,1,0.32,1) both;
-}
- 
+
+.fade-up { animation: fade-up 0.8s cubic-bezier(0.23,1,0.32,1) both; }
 .fade-up--delay-1 { animation-delay: 0.15s; }
 .fade-up--delay-2 { animation-delay: 0.3s; }
 .fade-up--delay-3 { animation-delay: 0.45s; }
- 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  :root {
-    --gap-lg: 2rem;
-    --gap-xl: 3.5rem;
-  }
- 
-  .cinema-nav__links {
-    gap: var(--gap-md);
-  }
- 
-  .cinema-curtains::before,
-  .cinema-curtains::after {
-    width: 24px;
-  }
- 
-  .cinema-screen {
-    padding: var(--gap-lg) var(--gap-md);
-  }
- 
-  h4, h5, h6 { font-size: 0.75rem; }
+
+/* ── Topbar ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(217,180,106,0.22);
+  margin-bottom: 2rem;
 }
-.topbar{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(217,180,106,0.22);
-    margin-bottom: 2rem;
+
+.brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 2rem;
+  color: var(--gold-light);
+  letter-spacing: -0.005em;
 }
-.brand{
-    font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic;
-    font-weight: 900;
-    font-size: 2rem;
-    color: var(--gold-light);
-    letter-spacing: -0.005em;
+
+.signin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: transparent;
+  color: var(--gold-bright);
+  border: none;
+  padding: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
-  .signin-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    background: transparent;
-    color: var(--gold-bright);
-    border: none;
-    padding: 0;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 500;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: color 0.2s ease;
-  }
 
-  .signin-btn:hover { color: #fff; }
+.signin-btn:hover { color: #fff; }
 
-  .topbar-actions {
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
-  }
+.topbar-actions { display: inline-flex; align-items: center; gap: 1rem; }
 
-  .signout-btn {
-    font-size: 1.1rem;
-    color: var(--film-silver);
-    opacity: 0.7;
-  }
+.signout-btn { font-size: 1.1rem; color: var(--film-silver); opacity: 0.7; }
+.signout-btn:hover { color: #fff; opacity: 1; }
 
-  .signout-btn:hover {
-    color: #fff;
-    opacity: 1;
-  }
-
-  .signin-btn svg {
-    width: 28px; height: 28px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  .search-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 1.5rem auto;
-    max-width: 900px;
+.signin-btn svg {
+  width: 28px; height: 28px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
+
+/* ── Search Bar ── */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  width: auto;
+  background: rgba(10,5,5,0.9);
+  border: 1px solid rgba(201,168,76,0.5);
+  color: var(--cream);
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  min-width: 130px;
+}
+
+.filter-select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+.filter-select option { background: #1a0a0a; color: var(--cream); }
 
 .search-box {
-    display: flex;
-    flex: 1;
-    border: 1px solid #c9a84c;
-    background-color: #1a0a0a;
-    overflow: hidden;
+  display: flex;
+  flex: 1;
+  max-width: 500px;
+  border: 1px solid #c9a84c;
+  background-color: #1a0a0a;
+  position: relative;
+  overflow: visible;
 }
 
 .search-input {
-    width: auto; 
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0.6rem 1rem;
-    color: #f0e8d5;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
+  width: auto;
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0.6rem 1rem;
+  color: #f0e8d5;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
 }
 
-.search-input::placeholder {
-    color: rgba(201, 168, 76, 0.4);
-}
+.search-input::placeholder { color: rgba(201,168,76,0.4); }
 
 .search-btn {
-    align-self: stretch;
-    background: #c9a84c;
-    border: none;
-    padding: 0.6rem 0.9rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
+  align-self: stretch;
+  background: #c9a84c;
+  border: none;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
 
-.search-btn svg {
-    width: 18px;
-    height: 18px;
-    stroke: #1a0a0a;
-}
-
-.search-btn:hover {
-    background: #e0c068;
-}
+.search-btn svg { width: 18px; height: 18px; stroke: #1a0a0a; }
+.search-btn:hover { background: #e0c068; }
 
 .clear-btn {
-    background: transparent;
-    border: 1px solid rgba(201, 168, 76, 0.4);
-    color: rgba(201, 168, 76, 0.7);
-    padding: 0.5rem 0.8rem;
-    cursor: pointer;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(201,168,76,0.4);
+  color: rgba(201,168,76,0.7);
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.clear-btn:hover {
-    border-color: #c9a84c;
-    color: #c9a84c;
+.clear-btn:hover { border-color: #c9a84c; color: #c9a84c; }
+
+/* ── Suggestions Dropdown ── */
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  right: -1px;
+  background: #1a0a0a;
+  border: 1px solid #c9a84c;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  z-index: 999;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: #f0e8d5;
+  cursor: pointer;
+}
+
+.suggestion-item:hover,
+.suggestion-item.active {
+  background: rgba(201,168,76,0.12);
+  color: #c9a84c;
 }
 .filter-select {
     width: auto; 
@@ -1144,9 +942,7 @@ footer,
   box-shadow: 0 8px 40px rgba(0,0,0,0.6);
 }
 
-.modal-box h5 {
-  margin-bottom: 0.5rem;
-}
+.modal-box h5 { margin-bottom: 0.5rem; }
 
 /* ── Google Sign-In Button ── */
 .google-btn {

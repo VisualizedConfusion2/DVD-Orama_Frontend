@@ -31,10 +31,10 @@ Vue.createApp({
         }
     },
     async created() {
-        if (!localStorage.getItem('token')) {
-            window.location.href = 'Log-in.html';
-            return;
-        }
+        //if (!localStorage.getItem('token')) {
+        //window.location.href = 'Log-in.html';
+        //    return;
+        //}
         this.getMovies(baseUri + "movie");
     },
     methods: {

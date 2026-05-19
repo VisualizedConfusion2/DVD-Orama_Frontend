@@ -19,6 +19,7 @@ Vue.createApp({
             movies: [],
             movie: null,
             movieCollection: [],
+            movieCollection: [],
             UserName: localStorage.getItem('username'),
             showSettings: false,
             settingsUsername: '',
@@ -35,14 +36,14 @@ Vue.createApp({
             window.location.href = 'Log-in.html';
             return;
         }
-        this.GetMovieCollections(baseUri);
-        // this.getMovies(baseUri + "movie");
+        await this.GetMovieCollections();
     },
     methods: {
-        async GetMovieCollections(Uri){
+        async GetMovieCollections() {
             try {
-                const response = await axios.get(baseUri + "MovieCollection/ByUser/" + localStorage.getItem('firebaseUid'));                
+                const response = await axios.get(baseUri + "MovieCollection/ByUser/" + localStorage.getItem('firebaseUid'));
                 this.movieCollection = response.data;
+                console.log(response.data);
             } catch (ex) {
                 console.log("ERROR:", ex);
             }
@@ -79,7 +80,6 @@ Vue.createApp({
             const changingPassword = this.settingsNewPassword.length > 0;
 
             try {
-                // Reauthenticate if changing email or password (Firebase requires it)
                 if ((changingEmail || changingPassword) && this.settingsCurrentPassword) {
                     const credential = EmailAuthProvider.credential(user.email, this.settingsCurrentPassword);
                     await reauthenticateWithCredential(user, credential);
@@ -89,17 +89,14 @@ Vue.createApp({
                     return;
                 }
 
-                // Update display name
                 if (this.settingsUsername !== user.displayName) {
                     await updateProfile(user, { displayName: this.settingsUsername });
                 }
 
-                // Update email in Firebase
                 if (changingEmail) {
                     await updateEmail(user, this.settingsEmail);
                 }
 
-                // Update password in Firebase
                 if (changingPassword) {
                     if (this.settingsNewPassword.length < 6) {
                         this.settingsError = 'Nyt password skal være mindst 6 tegn.';
@@ -109,7 +106,6 @@ Vue.createApp({
                     await updatePassword(user, this.settingsNewPassword);
                 }
 
-                // Sync updated username + email to backend DB
                 const token = await user.getIdToken(true);
                 await fetch(baseUri + 'user/sync', {
                     method: 'POST',
@@ -121,7 +117,6 @@ Vue.createApp({
                     })
                 });
 
-                // Update local state
                 localStorage.setItem('username', this.settingsUsername);
                 localStorage.setItem('token', token);
                 this.UserName = this.settingsUsername;
@@ -144,4 +139,4 @@ Vue.createApp({
             }
         }
     }
-}).mount("#app")
+}).mount("#app");

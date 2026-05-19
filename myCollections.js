@@ -18,6 +18,7 @@ Vue.createApp({
         return {
             movies: [],
             movie: null,
+            movieCollection: [],
             UserName: localStorage.getItem('username'),
             showSettings: false,
             settingsUsername: '',
@@ -34,14 +35,14 @@ Vue.createApp({
             window.location.href = 'Log-in.html';
             return;
         }
-        // this.GetMovieCollections(baseUri);
+        this.GetMovieCollections(baseUri);
         // this.getMovies(baseUri + "movie");
     },
     methods: {
-        GetMovieCollections(){
+        async GetMovieCollections(Uri){
             try {
-                const response = await axios.get(Uri + "MovieCollection");
-                this.movies = response.data;
+                const response = await axios.get(baseUri + "MovieCollection/ByUser/" + localStorage.getItem('firebaseUid'));                
+                this.movieCollection = response.data;
             } catch (ex) {
                 console.log("ERROR:", ex);
             }
@@ -49,6 +50,7 @@ Vue.createApp({
         redirectToLogin() {
             localStorage.removeItem('token');
             localStorage.removeItem('username');
+            localStorage.removeItem('firebaseUid');
             window.location.href = 'Log-in.html';
         },
         openSettings() {

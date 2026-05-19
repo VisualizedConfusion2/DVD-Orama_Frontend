@@ -17,6 +17,7 @@ Vue.createApp({
         return {
             movies: [],
             movie: null,
+            loading: false,
             UserName: localStorage.getItem('username'),
             searchTitle: '',
             showSettings: false,
@@ -114,15 +115,18 @@ Vue.createApp({
                 this.suggestions = [];
                 return;
             }
+            const self = this;
             this.suggestDebounce = setTimeout(async () => {
                 try {
                     const res = await axios.get(baseUri + 'movie/suggestions', {
                         params: { query: q }
                     });
-                    this.suggestions = res.data;
-                    this.activeSuggestion = -1;
-                } catch {
-                    this.suggestions = [];
+                    console.log('suggestions:', res.data);
+                    self.suggestions = res.data;
+                    self.activeSuggestion = -1;
+                } catch (e) {
+                    console.log('error:', e);
+                    self.suggestions = [];
                 }
             }, 250);
         },
@@ -134,7 +138,7 @@ Vue.createApp({
         },
 
         hideSuggestions() {
-            setTimeout(() => { this.suggestions = []; }, 150);
+            setTimeout(() => { this.suggestions = []; }, 400);
         },
 
         onSuggestionKeydown(e) {

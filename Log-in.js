@@ -17,6 +17,7 @@ async function saveTokenAndRedirect(userCredential) {
     const token = await userCredential.user.getIdToken();
     localStorage.setItem('token', token);
     localStorage.setItem('username', userCredential.user.displayName || userCredential.user.email);
+    localStorage.setItem('firebaseUid', userCredential.user.uid);
     window.location.href = 'index.html';
 }
 

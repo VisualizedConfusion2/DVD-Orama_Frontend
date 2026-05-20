@@ -16,6 +16,7 @@ Vue.createApp({
     data() {
         return {
             movies: [],
+            didYouMean: [],
             movie: null,
             loading: false,
             UserName: localStorage.getItem('username'),
@@ -100,8 +101,23 @@ Vue.createApp({
             } catch (ex) {
                 if (ex.response?.status === 404) {
                     this.movies = [];
+                    this.isSearching = true;
+                    // Fetch fuzzy suggestions when search returns nothing
+                    if (this.searchTitle.trim()) {
+                        await this.fetchSuggestions(this.searchTitle.trim());
+                    }
                 }
                 console.log("ERROR:", ex);
+            }
+        },
+        async fetchSuggestions(title) {
+            try {
+                const response = await axios.get(baseUri + "movie/suggest", {
+                    params: { title }
+                });
+                this.didYouMean = response.data;
+            } catch {
+                this.didYouMean = [];
             }
         },
         clearSearch() {
@@ -111,6 +127,7 @@ Vue.createApp({
             this.isSearching = false;
             this.getMovies(baseUri + "movie");
             this.selectedYear = null;
+            this.didYouMean = [];
         },
         async onTitleInput() {
             clearTimeout(this.suggestDebounce);

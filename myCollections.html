@@ -43,8 +43,37 @@
             </div>
         </div>
         <!--End of the navbar-->
+        <!-- Create Collection -->
+        <div style="max-width: 500px; margin: 2rem auto; padding: 2rem; background: #14100c; border: 1px solid rgba(201,168,76,0.2);">
+            <h3 style="margin-bottom: 1.5rem; text-align: center;">New Collection</h3>
+            
+            <div style="margin-bottom: 1.2rem;">
+                <label>Collection Name</label>
+                <input 
+                    v-model="movieCollectionName" 
+                    type="text" 
+                    placeholder="Enter collection name..."
+                />
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                <label style="margin: 0; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input 
+                        v-model="isPublic" 
+                        type="checkbox" 
+                        style="width: auto; accent-color: var(--gold);"
+                    />
+                    Make Public
+                </label>
+            </div>
+
+            <button @click="CreateMovieCollection" class="btn btn-primary" style="width: 100%;">
+                Create Collection
+            </button>
+        </div>
 
 
+        
         <h2>Collections</h2>
         <div v-for="collection in movieCollection" :key="collection.movieCollectionId">
             <h3>{{ collection.name }}</h3>

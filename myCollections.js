@@ -19,6 +19,7 @@ Vue.createApp({
             movies: [],
             movie: null,
             movieCollection: [],
+            movieCollectionName: '',
             UserName: localStorage.getItem('username'),
             showSettings: false,
             settingsUsername: '',
@@ -28,6 +29,9 @@ Vue.createApp({
             settingsError: null,
             settingsSuccess: null,
             settingsSaving: false,
+            isPublic: false,
+            showDropdown: false,
+            showCreateCollection: false,
         }
     },
     async created() {
@@ -45,6 +49,22 @@ Vue.createApp({
                 console.log(response.data);
             } catch (ex) {
                 console.log("ERROR:", ex);
+            }
+        },
+        CreateMovieCollection(){
+            if(this.movieCollectionName.trim() === '') {
+                alert('Indtast et navn til samlingen');
+                return;
+            }
+            else{
+                axios.post(baseUri + "MovieCollection/Create", {
+                    name: this.movieCollectionName,
+                    firebaseUid: localStorage.getItem('firebaseUid'),
+                    isPublic: this.isPublic
+                }).then(response => {
+                    this.movieCollectionName = '';
+                    this.GetMovieCollections();
+                });
             }
         },
         redirectToLogin() {

@@ -53,6 +53,9 @@ Vue.createApp({
             await this.loadStreamingServices();
     },
     methods: {
+              getAllMovies() {
+            this.getMovies(baseUri + "movie");
+        },
         async getMovies(uri) {
             try {
                 const response = await axios.get(uri);

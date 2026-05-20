@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actor Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Stylesheet.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="topbar">
+            <div class="brand" style="cursor:pointer;" @click="goHome">DVD-Orama</div>
+
+            <!-- Logged in: show username + separate sign out button -->
+            <div v-if="UserName" class="topbar-actions">
+                <button class="signin-btn" type="button" @click="openSettings">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
+                    </svg>
+                    {{ UserName }}
+                </button>
+                <button class="signin-btn signout-btn" type="button" @click="redirectToLogin">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    sign out
+                </button>
+            </div>
+            <!-- Not logged in: single sign in button -->
+            <button v-else class="signin-btn" type="button" @click="redirectToLogin">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
+                </svg>
+                sign in
+            </button>
+        </div>
+
+        <h2 style="text-align:center;">Movies with {{ actorName }}</h2>
+
+        <p v-if="loading" style="text-align:center; color:#c9a84c;">Loading movies...</p>
+        <table v-else>
+            <thead>
+                <tr>
+                    <th>Poster</th>
+                    <th>Title</th>
+                    <th>Release Year</th>
+                    <th>Duration</th>
+                    <th>Find</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(movie, index) in movies" :key="index">
+                    <td><img :src="movie.posterUrl" :alt="movie.title" width="80" /></td>
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.publicationYear }}</td>
+                    <td>{{ movie.duration }} minutes</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#movieModal" :data-title="movie.title"
+                            :data-year="movie.publicationYear" :data-duration="movie.duration"
+                            :data-poster="movie.posterUrl"
+                            :data-streaming="JSON.stringify(movie.streamingLocations)"
+                            :data-actors="JSON.stringify(movie.actors)">
+                            Find Movie
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div><!-- end #app -->
+
+    <!-- Modal outside #app to avoid Vue/Bootstrap DOM conflict -->
+    <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="background-color:#1a0a0a; border:1px solid #c9a84c; color:#f0e8d5;">
+                <div class="modal-header" style="border-bottom:1px solid rgba(201,168,76,0.3);">
+                    <h5 class="modal-title" id="movieModalLabel"
+                        style="font-family:'Josefin Sans',sans-serif; letter-spacing:0.15em; text-transform:uppercase; color:#c9a84c;">
+                        Movie Details
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        style="color:#c9a84c; opacity:1;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="font-family:'Cormorant Garamond',serif; font-size:1.1rem;">
+                    <!-- Poster image -->
+                    <img id="modal-poster-img" src="" alt="" width="120"
+                        style="display: none; margin: 0 auto 1rem auto;" />
+
+                    <p><strong style="color:#c9a84c;">Title:</strong> <span id="modal-title"></span></p>
+                    <p><strong style="color:#c9a84c;">Release Year:</strong> <span id="modal-year"></span></p>
+                    <p><strong style="color:#c9a84c;">Duration:</strong> <span id="modal-duration"></span> minutes</p>
+
+                    <div style="margin-top:1rem;">
+                        <strong style="color:#c9a84c;">Available On:</strong>
+                        <ul id="modal-streaming-list" style="list-style:none; padding:0; margin-top:0.5rem;"></ul>
+                        <strong style="color:#c9a84c; margin-top:1rem; display:block;">Actors:</strong>
+                        <ul id="modal-actors-list" style="list-style:none; padding:0; margin-top:0.5rem;"></ul>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(201,168,76,0.3);">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="Actor.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#movieModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+
+                // Poster image
+                var poster = button.attr('data-poster');
+                var img = document.getElementById('modal-poster-img');
+                if (poster && poster !== 'null' && poster !== 'undefined') {
+                    img.src = poster;
+                    img.style.display = 'block';
+                } else {
+                    img.src = '';
+                    img.style.display = 'none';
+                }
+
+                // Text fields
+                document.getElementById('modal-title').textContent    = button.attr('data-title')    || '—';
+                document.getElementById('modal-year').textContent     = button.attr('data-year')     || '—';
+                document.getElementById('modal-duration').textContent = button.attr('data-duration') || '—';
+
+                // Streaming locations
+                var list = document.getElementById('modal-streaming-list');
+                list.innerHTML = '';
+                try {
+                    var locations = JSON.parse(button.attr('data-streaming') || '[]') || [];
+                    if (locations.length === 0) {
+                        var empty = document.createElement('li');
+                        empty.style.color = '#f0e8d5';
+                        empty.textContent = 'No streaming locations available.';
+                        list.appendChild(empty);
+                    } else {
+                        locations.forEach(function (location) {
+                            var url  = location.url || '#';
+                            var name = location.streamingServiceName || url;
+                            var a = document.createElement('a');
+                            a.href = url;
+                            a.target = '_blank';
+                            a.rel = 'noopener';
+                            a.style.color = '#0097EE';
+                            a.textContent = name;
+                            var li = document.createElement('li');
+                            li.style.marginTop = '0.4rem';
+                            li.appendChild(a);
+                            list.appendChild(li);
+                        });
+                    }
+                } catch (e) {
+                    console.log('Streaming parse error:', e);
+                    var errorLi = document.createElement('li');
+                    errorLi.style.color = '#f0e8d5';
+                    errorLi.textContent = 'Could not load streaming locations.';
+                    list.appendChild(errorLi);
+                }
+
+                // Actors
+                var actorsList = document.getElementById('modal-actors-list');
+                actorsList.innerHTML = '';
+                try {
+                    var actors = JSON.parse(button.attr('data-actors') || '[]') || [];
+                    if (actors.length === 0) {
+                        var emptyActor = document.createElement('li');
+                        emptyActor.style.color = '#f0e8d5';
+                        emptyActor.textContent = 'No actors available.';
+                        actorsList.appendChild(emptyActor);
+                    } else {
+                        actors.forEach(function (actorName) {
+                            var a = document.createElement('a');
+                            a.href = 'Actor.html?name=' + encodeURIComponent(actorName);
+                            a.style.color = '#0097EE';
+                            a.style.cursor = 'pointer';
+                            a.textContent = actorName;
+                            var li = document.createElement('li');
+                            li.style.marginTop = '0.4rem';
+                            li.appendChild(a);
+                            actorsList.appendChild(li);
+                        });
+                    }
+                } catch (e) {
+                    console.log('Actors parse error:', e);
+                    var errorActor = document.createElement('li');
+                    errorActor.style.color = '#f0e8d5';
+                    errorActor.textContent = 'Could not load actors.';
+                    actorsList.appendChild(errorActor);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

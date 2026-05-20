@@ -12,13 +12,14 @@ import { firebaseConfig } from "./firebase-config.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+
 Vue.createApp({
     data() {
         return {
             movies: [],
             didYouMean: [],
             movie: null,
-            loading: false,
+            loading: true,  // starts true so table waits for data
             UserName: localStorage.getItem('username'),
             searchTitle: '',
             showSettings: false,
@@ -28,11 +29,9 @@ Vue.createApp({
             isSearching: false,
             genres: [],
             streamingServices: [],
-            // ADD THESE THREE:
             suggestions: [],
             activeSuggestion: -1,
             suggestDebounce: null,
-            // rest of your settings fields...
             settingsUsername: '',
             settingsEmail: '',
             settingsNewPassword: '',
@@ -43,25 +42,23 @@ Vue.createApp({
         }
     },
     async created() {
-        //await Promise.all([
-        //    this.getMovies(baseUri + "movie"),
-        //    this.loadGenres(),
-        //    this.loadStreamingServices(),
-        //]);
-            await this.getMovies(baseUri + "movie");
-            await this.loadGenres();
-            await this.loadStreamingServices();
+        await this.getMovies(baseUri + "movie");
+        await this.loadGenres();
+        await this.loadStreamingServices();
     },
     methods: {
-              getAllMovies() {
+        getAllMovies() {
             this.getMovies(baseUri + "movie");
         },
         async getMovies(uri) {
+            this.loading = true;
             try {
                 const response = await axios.get(uri);
                 this.movies = response.data;
             } catch (ex) {
                 console.log("ERROR:", ex);
+            } finally {
+                this.loading = false;
             }
         },
         async loadGenres() {
@@ -81,16 +78,17 @@ Vue.createApp({
             }
         },
         async searchMovies() {
-            const hasTitle = this.searchTitle.trim();
-            const hasGenre = this.selectedGenre;
+            const hasTitle   = this.searchTitle.trim();
+            const hasGenre   = this.selectedGenre;
             const hasService = this.selectedService;
-            const hasYear = this.selectedYear;
+            const hasYear    = this.selectedYear;
 
             if (!hasTitle && !hasGenre && !hasService && !hasYear) {
                 this.clearSearch();
                 return;
             }
 
+            this.loading = true;
             try {
                 const params = {};
                 if (hasTitle)   params.title = this.searchTitle;
@@ -101,16 +99,18 @@ Vue.createApp({
                 const response = await axios.get(baseUri + "movie/search", { params });
                 this.movies = response.data;
                 this.isSearching = true;
+                this.didYouMean = [];
             } catch (ex) {
                 if (ex.response?.status === 404) {
                     this.movies = [];
                     this.isSearching = true;
-                    // Fetch fuzzy suggestions when search returns nothing
                     if (this.searchTitle.trim()) {
                         await this.fetchSuggestions(this.searchTitle.trim());
                     }
                 }
                 console.log("ERROR:", ex);
+            } finally {
+                this.loading = false;
             }
         },
         async fetchSuggestions(title) {
@@ -124,13 +124,13 @@ Vue.createApp({
             }
         },
         clearSearch() {
-            this.searchTitle = '';
-            this.selectedGenre = '';
+            this.searchTitle    = '';
+            this.selectedGenre  = '';
             this.selectedService = '';
-            this.isSearching = false;
+            this.selectedYear   = null;
+            this.isSearching    = false;
+            this.didYouMean     = [];
             this.getMovies(baseUri + "movie");
-            this.selectedYear = null;
-            this.didYouMean = [];
         },
         async onTitleInput() {
             clearTimeout(this.suggestDebounce);
@@ -145,26 +145,21 @@ Vue.createApp({
                     const res = await axios.get(baseUri + 'movie/suggestions', {
                         params: { query: q }
                     });
-                    console.log('suggestions:', res.data);
                     self.suggestions = res.data;
                     self.activeSuggestion = -1;
                 } catch (e) {
-                    console.log('error:', e);
                     self.suggestions = [];
                 }
             }, 250);
         },
-
         selectSuggestion(title) {
             this.searchTitle = title;
             this.suggestions = [];
             this.searchMovies();
         },
-
         hideSuggestions() {
             setTimeout(() => { this.suggestions = []; }, 400);
         },
-
         onSuggestionKeydown(e) {
             if (!this.suggestions.length) return;
             if (e.key === 'ArrowDown') {
@@ -186,61 +181,56 @@ Vue.createApp({
         },
         openSettings() {
             const user = auth.currentUser;
-            this.settingsUsername = user?.displayName || this.UserName || '';
-            this.settingsEmail = user?.email || '';
+            this.settingsUsername    = user?.displayName || this.UserName || '';
+            this.settingsEmail       = user?.email || '';
             this.settingsNewPassword = '';
             this.settingsCurrentPassword = '';
-            this.settingsError = null;
+            this.settingsError   = null;
             this.settingsSuccess = null;
-            this.showSettings = true;
+            this.showSettings    = true;
         },
         async saveSettings() {
-            this.settingsError = null;
+            this.settingsError   = null;
             this.settingsSuccess = null;
-            this.settingsSaving = true;
+            this.settingsSaving  = true;
 
             const user = auth.currentUser;
             if (!user) {
-                this.settingsError = 'Ikke logget ind. Genindlæs siden.';
+                this.settingsError  = 'Ikke logget ind. Genindlæs siden.';
                 this.settingsSaving = false;
                 return;
             }
 
-            const changingEmail = this.settingsEmail !== user.email;
+            const changingEmail    = this.settingsEmail !== user.email;
             const changingPassword = this.settingsNewPassword.length > 0;
 
             try {
-                // Reauthenticate if changing email or password (Firebase requires it)
                 if ((changingEmail || changingPassword) && this.settingsCurrentPassword) {
                     const credential = EmailAuthProvider.credential(user.email, this.settingsCurrentPassword);
                     await reauthenticateWithCredential(user, credential);
                 } else if (changingEmail || changingPassword) {
-                    this.settingsError = 'Indtast dit nuværende password for at ændre email eller password.';
+                    this.settingsError  = 'Indtast dit nuværende password for at ændre email eller password.';
                     this.settingsSaving = false;
                     return;
                 }
 
-                // Update display name
                 if (this.settingsUsername !== user.displayName) {
                     await updateProfile(user, { displayName: this.settingsUsername });
                 }
 
-                // Update email in Firebase
                 if (changingEmail) {
                     await updateEmail(user, this.settingsEmail);
                 }
 
-                // Update password in Firebase
                 if (changingPassword) {
                     if (this.settingsNewPassword.length < 6) {
-                        this.settingsError = 'Nyt password skal være mindst 6 tegn.';
+                        this.settingsError  = 'Nyt password skal være mindst 6 tegn.';
                         this.settingsSaving = false;
                         return;
                     }
                     await updatePassword(user, this.settingsNewPassword);
                 }
 
-                // Sync updated username + email to backend DB
                 const token = await user.getIdToken(true);
                 await fetch(baseUri + 'user/sync', {
                     method: 'POST',
@@ -252,7 +242,6 @@ Vue.createApp({
                     })
                 });
 
-                // Update local state
                 localStorage.setItem('username', this.settingsUsername);
                 localStorage.setItem('token', token);
                 this.UserName = this.settingsUsername;

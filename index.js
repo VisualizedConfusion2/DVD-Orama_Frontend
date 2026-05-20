@@ -12,6 +12,7 @@ import { firebaseConfig } from "./firebase-config.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+
 Vue.createApp({
     data() {
         return {
@@ -42,19 +43,24 @@ Vue.createApp({
         }
     },
     async created() {
-        //await Promise.all([
-        //    this.getMovies(baseUri + "movie"),
-        //    this.loadGenres(),
-        //    this.loadStreamingServices(),
-        //]);
-            await this.getMovies(baseUri + "movie");
-            await this.loadGenres();
-            await this.loadStreamingServices();
+        //if (!localStorage.getItem('token')) {
+        //window.location.href = 'Log-in.html';
+        //    return;
+        //}
+        this.getMovies(baseUri + "movie");
+        await this.loadGenres();
+        await this.loadStreamingServices();
     },
     methods: {
-        async getMovies(uri) {
+        getAllMovies() {
+            this.getMovies(baseUri + "movie");
+        },
+        async getMovies(Uri) {
             try {
-                const response = await axios.get(uri);
+                const token = localStorage.getItem('token');
+                const response = await axios.get(Uri, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 this.movies = response.data;
             } catch (ex) {
                 console.log("ERROR:", ex);
@@ -89,10 +95,10 @@ Vue.createApp({
 
             try {
                 const params = {};
-                if (hasTitle)   params.title = this.searchTitle;
-                if (hasGenre)   params.genres = this.selectedGenre;
+                if (hasTitle) params.title = this.searchTitle;
+                if (hasGenre) params.genres = this.selectedGenre;
                 if (hasService) params.streamingServices = this.selectedService;
-                if (hasYear)    params.publicationYear = this.selectedYear;
+                if (hasYear) params.publicationYear = this.selectedYear;
 
                 const response = await axios.get(baseUri + "movie/search", { params });
                 this.movies = response.data;

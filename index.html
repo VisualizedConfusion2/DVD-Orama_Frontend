@@ -96,6 +96,21 @@
         ✕ clear
       </button>
     </div>
+    
+        <button class="clear-btn" v-if="isSearching" @click="clearSearch">
+      ✕ clear
+    </button>
+</div>
+  <div v-if="didYouMean.length > 0" class="did-you-mean">
+    <span>Did you mean: </span>
+    <span
+        v-for="s in didYouMean"
+        :key="s"
+        class="suggestion-chip"
+        @click="searchTitle = s; didYouMean = []; searchMovies()">
+        {{ s }}
+    </span>
+</div>
     <p v-if="loading" style="text-align:center; color:#c9a84c;">Loading movies...</p>
     <table v-else>
       <thead>

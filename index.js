@@ -12,11 +12,11 @@ import { firebaseConfig } from "./firebase-config.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-
 Vue.createApp({
     data() {
         return {
             movies: [],
+            didYouMean: [],
             movie: null,
             loading: false,
             UserName: localStorage.getItem('username'),
@@ -43,24 +43,22 @@ Vue.createApp({
         }
     },
     async created() {
-        //if (!localStorage.getItem('token')) {
-        //window.location.href = 'Log-in.html';
-        //    return;
-        //}
-        this.getMovies(baseUri + "movie");
-        await this.loadGenres();
-        await this.loadStreamingServices();
+        //await Promise.all([
+        //    this.getMovies(baseUri + "movie"),
+        //    this.loadGenres(),
+        //    this.loadStreamingServices(),
+        //]);
+            await this.getMovies(baseUri + "movie");
+            await this.loadGenres();
+            await this.loadStreamingServices();
     },
     methods: {
-        getAllMovies() {
+              getAllMovies() {
             this.getMovies(baseUri + "movie");
         },
-        async getMovies(Uri) {
+        async getMovies(uri) {
             try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(Uri, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const response = await axios.get(uri);
                 this.movies = response.data;
             } catch (ex) {
                 console.log("ERROR:", ex);
@@ -95,10 +93,10 @@ Vue.createApp({
 
             try {
                 const params = {};
-                if (hasTitle) params.title = this.searchTitle;
-                if (hasGenre) params.genres = this.selectedGenre;
+                if (hasTitle)   params.title = this.searchTitle;
+                if (hasGenre)   params.genres = this.selectedGenre;
                 if (hasService) params.streamingServices = this.selectedService;
-                if (hasYear) params.publicationYear = this.selectedYear;
+                if (hasYear)    params.publicationYear = this.selectedYear;
 
                 const response = await axios.get(baseUri + "movie/search", { params });
                 this.movies = response.data;
@@ -106,8 +104,23 @@ Vue.createApp({
             } catch (ex) {
                 if (ex.response?.status === 404) {
                     this.movies = [];
+                    this.isSearching = true;
+                    // Fetch fuzzy suggestions when search returns nothing
+                    if (this.searchTitle.trim()) {
+                        await this.fetchSuggestions(this.searchTitle.trim());
+                    }
                 }
                 console.log("ERROR:", ex);
+            }
+        },
+        async fetchSuggestions(title) {
+            try {
+                const response = await axios.get(baseUri + "movie/suggest", {
+                    params: { title }
+                });
+                this.didYouMean = response.data;
+            } catch {
+                this.didYouMean = [];
             }
         },
         clearSearch() {
@@ -117,6 +130,7 @@ Vue.createApp({
             this.isSearching = false;
             this.getMovies(baseUri + "movie");
             this.selectedYear = null;
+            this.didYouMean = [];
         },
         async onTitleInput() {
             clearTimeout(this.suggestDebounce);

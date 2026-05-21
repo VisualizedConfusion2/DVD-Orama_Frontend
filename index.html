@@ -71,7 +71,7 @@
 
     <h2 v-if="UserName == null">Welcome, Guest</h2>
     <h2 v-else>Welcome, {{ UserName }}</h2>
-<!-- Search Bar -->
+    <!-- Search Bar -->
 
 
     <!-- Search Bar -->
@@ -106,8 +106,7 @@
 
         <!-- Suggestions dropdown -->
         <ul v-if="suggestions.length > 0" class="suggestions-dropdown">
-          <li v-for="(s, i) in suggestions" :key="i"
-            :class="['suggestion-item', { active: i === activeSuggestion }]"
+          <li v-for="(s, i) in suggestions" :key="i" :class="['suggestion-item', { active: i === activeSuggestion }]"
             @mousedown.prevent="selectSuggestion(s)">
             <span>{{ s }}</span>
           </li>
@@ -136,6 +135,7 @@
           <th>Release Year</th>
           <th>Duration</th>
           <th>Find</th>
+          <th>Add to Collection</th>
         </tr>
       </thead>
       <tbody>
@@ -146,11 +146,17 @@
           <td>{{ movie.duration }} minutes</td>
           <td>
             <!-- Bootstrap 4 uses data-toggle / data-target (no "bs-" prefix) -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
+            <button type="button" style="padding: 5%; padding-left: 15%; padding-right: 15%;" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
               :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
               :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)"
               :data-actors="JSON.stringify(movie.actors)">
               Find Movie
+            </button>
+          </td>
+          <td>
+            <button type="button" style="padding: 4%; padding-left: 8%; padding-right: 8%;" class="btn btn-primary btn-sm"
+              @click="showAddToCollection = true; selectedMovie = movie">
+              Add to Collection
             </button>
           </td>
         </tr>
@@ -203,6 +209,33 @@
       </div>
     </div>
 
+    <div v-if="showAddToCollection" class="modal-backdrop" @click.self="showAddToCollection = false">
+      <div class="modal-box" style="max-width:400px">
+        <h5 class="mb-4">Add to Collection</h5>
+        <p style="color:var(--film-silver); font-size:0.9rem;">{{ selectedMovie?.title }}</p>
+
+        <div class="form-group">
+          <label>Select Collection</label>
+          <select v-model="selectedCollectionId"
+            style="width:100%; background:#1a0a0a; border:1px solid rgba(201,168,76,0.4); color:var(--cream); padding:0.7rem 1rem;">
+            <option value="" disabled>Choose a collection...</option>
+            <option v-for="collection in movieCollections" :key="collection.id" :value="collection.id">
+              {{ collection.name }}
+            </option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:0.75rem; margin-top:1rem;">
+          <button @click="AddMovieToCollection" class="btn btn-primary" style="flex:1;">
+            Add
+          </button>
+          <button @click="showAddToCollection = false" class="btn"
+            style="background:transparent; color:var(--film-silver); border:1px solid rgba(200,192,180,0.3)">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   </div><!-- end #app -->
 
 

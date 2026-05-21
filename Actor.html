@@ -14,7 +14,11 @@
 <body>
     <div id="app">
         <div class="topbar">
-            <div class="brand" style="cursor:pointer;" @click="goHome">DVD-Orama</div>
+            <div class="brand">
+                <a href="/index.html">
+                DVD-Orama
+                </a>
+            </div>
 
             <!-- Logged in: show username + separate sign out button -->
             <div v-if="UserName" class="topbar-actions">

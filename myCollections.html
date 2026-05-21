@@ -124,7 +124,8 @@
             <td>
               <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
                 :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
-                :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)">
+                :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)"
+                :data-actors="JSON.stringify(movie.actors)">
                 Find Movie
               </button>
             </td>

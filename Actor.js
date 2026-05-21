@@ -35,9 +35,6 @@ Vue.createApp({
         }
     },
     methods: {
-        goHome() {
-            window.location.href = 'index.html';
-        },
         redirectToLogin() {
             localStorage.removeItem('token');
             localStorage.removeItem('username');

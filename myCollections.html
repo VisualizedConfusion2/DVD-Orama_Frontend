@@ -22,7 +22,8 @@
       </div>
       <!-- Logged in: dropdown -->
       <div v-if="UserName" class="user-menu" ref="userMenuRef">
-        <button class="signin-btn user-menu-toggle" type="button" @click.stop="menuOpen = !menuOpen; console.log('clicked', menuOpen)">
+        <button class="signin-btn user-menu-toggle" type="button"
+          @click.stop="menuOpen = !menuOpen; console.log('clicked', menuOpen)">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="8" r="4"></circle>
             <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
@@ -42,7 +43,9 @@
           </button>
           <a href="/myCollections.html" class="user-dropdown-item">
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2m14 0V9a2 2 0 0 0-2-2M5 11V9a2 2 0 0 0 2-2m0 0V5a2 2 0 0 0 2-2h6a2 2 0 0 0 2 2v2M7 7h10"></path>
+              <path
+                d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2m14 0V9a2 2 0 0 0-2-2M5 11V9a2 2 0 0 0 2-2m0 0V5a2 2 0 0 0 2-2h6a2 2 0 0 0 2 2v2M7 7h10">
+              </path>
             </svg>
             My Collections
           </a>
@@ -92,7 +95,8 @@
         <button @click="CreateMovieCollection" class="btn btn-primary" style="width: 100%;">
           Create Collection
         </button>
-        <button @click="showCreateCollection = false" class="btn" style="width:100%; margin-top:0.5rem; background:transparent; color:var(--film-silver); border:1px solid rgba(200,192,180,0.3)">
+        <button @click="showCreateCollection = false" class="btn"
+          style="width:100%; margin-top:0.5rem; background:transparent; color:var(--film-silver); border:1px solid rgba(200,192,180,0.3)">
           Cancel
         </button>
       </div>
@@ -101,10 +105,10 @@
 
 
     <h2>Collections</h2>
-    <div v-for="collection in movieCollection" :key="collection.movieCollectionId">
+    <div v-for="collection in movieCollection" :key="collection.id">
       <h3>{{ collection.name }}</h3>
-      <div class="d-inline-flex" style="padding-left: 3px;">Public: <input type="checkbox" :checked="collection.isPublic"
-          @change="UpdateCollectionPublicity(collection, $event.target.checked)"> </div>
+      <div class="d-inline-flex" style="padding-left: 3px;">Public: <input type="checkbox"
+          :checked="collection.isPublic" @change="UpdateCollectionPublicity(collection, $event.target.checked)"> </div>
       <table>
         <thead>
           <tr>
@@ -113,6 +117,7 @@
             <th>Release Year</th>
             <th>Duration</th>
             <th>Find</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody>
@@ -122,11 +127,17 @@
             <td>{{ movie.publicationYear }}</td>
             <td>{{ movie.duration }} minutes</td>
             <td>
-              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
-                :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
-                :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)"
-                :data-actors="JSON.stringify(movie.actors)">
+              <button type="button" style="padding: 5%; padding-left: 15%; padding-right: 15%;"
+                class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal" :data-title="movie.title"
+                :data-year="movie.publicationYear" :data-duration="movie.duration" :data-poster="movie.posterUrl"
+                :data-streaming="JSON.stringify(movie.streamingLocations)" :data-actors="JSON.stringify(movie.actors)">
                 Find Movie
+              </button>
+            </td>
+            <td>
+              <button type="button" style="padding: 12%; padding-left: 15%; padding-right: 15%;"
+                class="btn btn-danger btn-sm" @click="RemoveMovieFromCollection(collection.id, movie.movieId)">
+                Remove
               </button>
             </td>
           </tr>

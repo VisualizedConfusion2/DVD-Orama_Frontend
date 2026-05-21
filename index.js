@@ -9,10 +9,11 @@ import {
     EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
+import { loadMovieModalHTML, initMovieModal } from "./movieModal.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-window.baseUri = baseUri; // expose for non-module scripts
+window.baseUri = baseUri;
 Vue.createApp({
     data() {
         return {
@@ -41,11 +42,13 @@ Vue.createApp({
             settingsSaving: false,
         }
     },
-    async created() {
-        await this.getMovies(baseUri + "movie");
-        await this.loadGenres();
-        await this.loadStreamingServices();
-    },
+        async created() {
+            await loadMovieModalHTML();
+            initMovieModal();
+            await this.getMovies(baseUri + "movie");
+            await this.loadGenres();
+            await this.loadStreamingServices();
+        },
     methods: {
         getAllMovies() {
             this.getMovies(baseUri + "movie");

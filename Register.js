@@ -88,6 +88,7 @@ Vue.createApp({
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('username', this.username);
+                localStorage.setItem('firebaseUid', cred.firebaseUid);
                 window.location.href = 'index.html';
 
             } catch (ex) {

@@ -14,10 +14,17 @@
 <body>
   <div id="app">
     <div class="topbar">
-      <div class="brand">DVD-Orama</div>
+      <div class="brand">
+        <a href="/index.html">
+          DVD-Orama
+        </a>
+      </div>
 
       <!-- Logged in: show username + separate sign out button -->
       <div v-if="UserName" class="topbar-actions">
+        <a href="/myCollections.html" class="signin-btn" type="button">
+          My Collections
+        </a>
         <button class="signin-btn" type="button" @click="openSettings">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="8" r="4"></circle>
@@ -46,6 +53,23 @@
 
     <h2 v-if="UserName == null">Welcome, Guest</h2>
     <h2 v-else>Welcome, {{ UserName }}</h2>
+<!-- Search Bar -->
+<div class="search-container">
+  <input
+    type="number"
+    v-model.number="selectedYear"
+    class="year-input" 
+    placeholder="Year"
+    min="1888"
+    max="2026"
+    @keyup.enter="searchMovies"
+  />
+  <select v-model="selectedGenre" class="filter-select">
+    <option value="">All Genres</option>
+    <option v-for="genre in genres" :key="genre.id" :value="genre.name">
+      {{ genre.name }}
+    </option>
+  </select>
 
     <!-- Search Bar -->
     <div class="search-container">
@@ -122,6 +146,7 @@
           <td>{{ movie.publicationYear }}</td>
           <td>{{ movie.duration }} minutes</td>
           <td>
+            <!-- Bootstrap 4 uses data-toggle / data-target (no "bs-" prefix) -->
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
               :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
               :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)"
@@ -133,6 +158,42 @@
       </tbody>
     </table>
 
+    <!-- ✅ Modal is now OUTSIDE the <table> so the DOM stays valid -->
+    <!-- Modal outside #app to avoid Vue/Bootstrap DOM conflict -->
+    <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color:#1a0a0a; border:1px solid #c9a84c; color:#f0e8d5;">
+          <div class="modal-header" style="border-bottom:1px solid rgba(201,168,76,0.3);">
+            <h5 class="modal-title" id="movieModalLabel"
+              style="font-family:'Josefin Sans',sans-serif; letter-spacing:0.15em; text-transform:uppercase; color:#c9a84c;">
+              Movie Details
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+              style="color:#c9a84c; opacity:1;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="font-family:'Cormorant Garamond',serif; font-size:1.1rem;">
+            <!-- Poster image -->
+            <img id="modal-poster-img" src="" alt="" width="120" style="display: none; margin: 0 auto 1rem auto;" />
+
+            <p><strong style="color:#c9a84c;">Title:</strong> <span id="modal-title"></span></p>
+            <p><strong style="color:#c9a84c;">Release Year:</strong> <span id="modal-year"></span></p>
+            <p><strong style="color:#c9a84c;">Duration:</strong> <span id="modal-duration"></span> minutes</p>
+            <div style="margin-top:1rem;">
+              <strong style="color:#c9a84c;">Available On:</strong>
+              <ul id="modal-streaming-list" style="list-style:none; padding:0; margin-top:0.5rem;"></ul>
+            </div>
+          </div>
+          <div class="modal-footer" style="border-top:1px solid rgba(201,168,76,0.3);">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Settings Modal -->
     <!-- User Settings Modal — stays inside #app so Vue controls it -->
     <div v-if="showSettings" class="modal-backdrop" @click.self="showSettings = false">
       <div class="modal-box" style="max-width:460px">
@@ -311,4 +372,5 @@
   </script>
 
 </body>
+
 </html>

@@ -132,7 +132,7 @@
           <td>{{ movie.duration }} minutes</td>
           <td>
             <!-- Bootstrap 4 uses data-toggle / data-target (no "bs-" prefix) -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
+            <button type="button" style="padding: 5%; padding-left: 15%; padding-right: 15%;" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
               :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
               :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)"
               :data-actors="JSON.stringify(movie.actors)">
@@ -140,7 +140,7 @@
             </button>
           </td>
           <td>
-            <button type="button" style="width: 75%;" class="btn btn-primary btn-sm"
+            <button type="button" style="padding: 4%; padding-left: 8%; padding-right: 8%;" class="btn btn-primary btn-sm"
               @click="showAddToCollection = true; selectedMovie = movie">
               Add to Collection
             </button>

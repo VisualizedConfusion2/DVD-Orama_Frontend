@@ -19,6 +19,7 @@ Vue.createApp({
     data() {
         return {
             movies: [],
+            menuOpen: false,
             UserName: localStorage.getItem('username'),
             actorName: '',
             loading: true,

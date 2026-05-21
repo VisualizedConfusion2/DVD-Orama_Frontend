@@ -3,4 +3,4 @@
 // Production: "https://dvd-oramaservices-e5bfgqbse9g5edg7.swedencentral-01.azurewebsites.net/api/"
 // export const BASE_URL = "http://localhost:5178/api/";
 //made it a new
-export const BASE_URL = "http://localhost:5178/api/";
+export const BASE_URL = "https://dvd-oramaservices-e5bfgqbse9g5edg7.swedencentral-01.azurewebsites.net/api/";

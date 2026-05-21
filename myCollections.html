@@ -15,8 +15,11 @@
   <div id="app">
     <!--Start of the navbar-->
     <div class="topbar">
-      <div class="brand">DVD-Orama</div>
-
+      <div class="brand">
+        <a href="/index.html">
+          DVD-Orama
+        </a>
+      </div>
       <!-- Logged in: dropdown -->
       <div v-if="UserName" class="user-menu" ref="userMenuRef">
         <button class="signin-btn user-menu-toggle" type="button" @click.stop="menuOpen = !menuOpen; console.log('clicked', menuOpen)">

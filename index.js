@@ -39,14 +39,42 @@ Vue.createApp({
             settingsError: null,
             settingsSuccess: null,
             settingsSaving: false,
+            showAddToCollection: false,
+            selectedMovie: null,
+            selectedCollectionId: '',
+            movieCollections: [],
         }
     },
     async created() {
         await this.getMovies(baseUri + "movie");
         await this.loadGenres();
         await this.loadStreamingServices();
+        await this.GetMovieCollections();
     },
     methods: {
+        async AddMovieToCollection() {
+            if (!this.selectedCollectionId) {
+                alert('Please select a collection');
+                return;
+            }
+            try {
+                await axios.put(baseUri + "MovieCollection/" + this.selectedCollectionId + "/userId/" + localStorage.getItem('firebaseUid') + "/movies/" + this.selectedMovie.movieId);
+                this.showAddToCollection = false;
+                this.selectedCollectionId = '';
+                await this.GetMovieCollections();
+            } catch (ex) {
+                console.log("ERROR:", ex);
+            }
+        },
+        async GetMovieCollections() {
+            try {
+                const response = await axios.get(baseUri + "MovieCollection/ByUser/" + localStorage.getItem('firebaseUid'));
+                this.movieCollections = response.data;
+                console.log(response.data);
+            } catch (ex) {
+                console.log("ERROR:", ex);
+            }
+        },
         getAllMovies() {
             this.getMovies(baseUri + "movie");
         },
@@ -78,10 +106,10 @@ Vue.createApp({
             }
         },
         async searchMovies() {
-            const hasTitle   = this.searchTitle.trim();
-            const hasGenre   = this.selectedGenre;
+            const hasTitle = this.searchTitle.trim();
+            const hasGenre = this.selectedGenre;
             const hasService = this.selectedService;
-            const hasYear    = this.selectedYear;
+            const hasYear = this.selectedYear;
 
             if (!hasTitle && !hasGenre && !hasService && !hasYear) {
                 this.clearSearch();
@@ -91,10 +119,10 @@ Vue.createApp({
             this.loading = true;
             try {
                 const params = {};
-                if (hasTitle)   params.title = this.searchTitle;
-                if (hasGenre)   params.genres = this.selectedGenre;
+                if (hasTitle) params.title = this.searchTitle;
+                if (hasGenre) params.genres = this.selectedGenre;
                 if (hasService) params.streamingServices = this.selectedService;
-                if (hasYear)    params.publicationYear = this.selectedYear;
+                if (hasYear) params.publicationYear = this.selectedYear;
 
                 const response = await axios.get(baseUri + "movie/search", { params });
                 this.movies = response.data;
@@ -124,12 +152,12 @@ Vue.createApp({
             }
         },
         clearSearch() {
-            this.searchTitle    = '';
-            this.selectedGenre  = '';
+            this.searchTitle = '';
+            this.selectedGenre = '';
             this.selectedService = '';
-            this.selectedYear   = null;
-            this.isSearching    = false;
-            this.didYouMean     = [];
+            this.selectedYear = null;
+            this.isSearching = false;
+            this.didYouMean = [];
             this.getMovies(baseUri + "movie");
         },
         async onTitleInput() {
@@ -181,27 +209,27 @@ Vue.createApp({
         },
         openSettings() {
             const user = auth.currentUser;
-            this.settingsUsername    = user?.displayName || this.UserName || '';
-            this.settingsEmail       = user?.email || '';
+            this.settingsUsername = user?.displayName || this.UserName || '';
+            this.settingsEmail = user?.email || '';
             this.settingsNewPassword = '';
             this.settingsCurrentPassword = '';
-            this.settingsError   = null;
+            this.settingsError = null;
             this.settingsSuccess = null;
-            this.showSettings    = true;
+            this.showSettings = true;
         },
         async saveSettings() {
-            this.settingsError   = null;
+            this.settingsError = null;
             this.settingsSuccess = null;
-            this.settingsSaving  = true;
+            this.settingsSaving = true;
 
             const user = auth.currentUser;
             if (!user) {
-                this.settingsError  = 'Ikke logget ind. Genindlæs siden.';
+                this.settingsError = 'Ikke logget ind. Genindlæs siden.';
                 this.settingsSaving = false;
                 return;
             }
 
-            const changingEmail    = this.settingsEmail !== user.email;
+            const changingEmail = this.settingsEmail !== user.email;
             const changingPassword = this.settingsNewPassword.length > 0;
 
             try {
@@ -209,7 +237,7 @@ Vue.createApp({
                     const credential = EmailAuthProvider.credential(user.email, this.settingsCurrentPassword);
                     await reauthenticateWithCredential(user, credential);
                 } else if (changingEmail || changingPassword) {
-                    this.settingsError  = 'Indtast dit nuværende password for at ændre email eller password.';
+                    this.settingsError = 'Indtast dit nuværende password for at ændre email eller password.';
                     this.settingsSaving = false;
                     return;
                 }
@@ -224,7 +252,7 @@ Vue.createApp({
 
                 if (changingPassword) {
                     if (this.settingsNewPassword.length < 6) {
-                        this.settingsError  = 'Nyt password skal være mindst 6 tegn.';
+                        this.settingsError = 'Nyt password skal være mindst 6 tegn.';
                         this.settingsSaving = false;
                         return;
                     }

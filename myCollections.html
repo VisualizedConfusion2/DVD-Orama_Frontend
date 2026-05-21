@@ -70,7 +70,7 @@
     <h2>Collections</h2>
     <div v-for="collection in movieCollection" :key="collection.movieCollectionId">
       <h3>{{ collection.name }}</h3>
-      <div class="d-inline-flex">Public: <input type="checkbox" :checked="collection.isPublic"
+      <div class="d-inline-flex" style="padding-left: 3px;">Public: <input type="checkbox" :checked="collection.isPublic"
           @change="UpdateCollectionPublicity(collection, $event.target.checked)"> </div>
       <table>
         <thead>

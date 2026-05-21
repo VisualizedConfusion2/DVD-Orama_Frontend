@@ -53,7 +53,7 @@
 
     <h2 v-if="UserName == null">Welcome, Guest</h2>
     <h2 v-else>Welcome, {{ UserName }}</h2>
-<!-- Search Bar -->
+    <!-- Search Bar -->
 
 
     <!-- Search Bar -->
@@ -88,8 +88,7 @@
 
         <!-- Suggestions dropdown -->
         <ul v-if="suggestions.length > 0" class="suggestions-dropdown">
-          <li v-for="(s, i) in suggestions" :key="i"
-            :class="['suggestion-item', { active: i === activeSuggestion }]"
+          <li v-for="(s, i) in suggestions" :key="i" :class="['suggestion-item', { active: i === activeSuggestion }]"
             @mousedown.prevent="selectSuggestion(s)">
             <svg class="suggestion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"></circle>
@@ -122,6 +121,7 @@
           <th>Release Year</th>
           <th>Duration</th>
           <th>Find</th>
+          <th>Add to Collection</th>
         </tr>
       </thead>
       <tbody>
@@ -137,6 +137,12 @@
               :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)"
               :data-actors="JSON.stringify(movie.actors)">
               Find Movie
+            </button>
+          </td>
+          <td>
+            <button type="button" style="width: 75%;" class="btn btn-primary btn-sm"
+              @click="showAddToCollection = true; selectedMovie = movie">
+              Add to Collection
             </button>
           </td>
         </tr>
@@ -224,7 +230,36 @@
       </div>
     </div>
 
+    <div v-if="showAddToCollection" class="modal-backdrop" @click.self="showAddToCollection = false">
+      <div class="modal-box" style="max-width:400px">
+        <h5 class="mb-4">Add to Collection</h5>
+        <p style="color:var(--film-silver); font-size:0.9rem;">{{ selectedMovie?.title }}</p>
+
+        <div class="form-group">
+          <label>Select Collection</label>
+          <select v-model="selectedCollectionId"
+            style="width:100%; background:#1a0a0a; border:1px solid rgba(201,168,76,0.4); color:var(--cream); padding:0.7rem 1rem;">
+            <option value="" disabled>Choose a collection...</option>
+            <option v-for="collection in movieCollections" :key="collection.id" :value="collection.id">
+              {{ collection.name }}
+            </option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:0.75rem; margin-top:1rem;">
+          <button @click="AddMovieToCollection" class="btn btn-primary" style="flex:1;">
+            Add
+          </button>
+          <button @click="showAddToCollection = false" class="btn"
+            style="background:transparent; color:var(--film-silver); border:1px solid rgba(200,192,180,0.3)">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   </div><!-- end #app -->
+
+
 
   <!-- Bootstrap modal OUTSIDE #app to avoid Vue/Bootstrap DOM conflict -->
   <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel"
@@ -236,8 +271,7 @@
             style="font-family:'Josefin Sans',sans-serif; letter-spacing:0.15em; text-transform:uppercase; color:#c9a84c;">
             Movie Details
           </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-            style="color:#c9a84c; opacity:1;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#c9a84c; opacity:1;">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -284,8 +318,8 @@
         }
 
         // Text fields
-        document.getElementById('modal-title').textContent    = button.attr('data-title')    || '—';
-        document.getElementById('modal-year').textContent     = button.attr('data-year')     || '—';
+        document.getElementById('modal-title').textContent = button.attr('data-title') || '—';
+        document.getElementById('modal-year').textContent = button.attr('data-year') || '—';
         document.getElementById('modal-duration').textContent = button.attr('data-duration') || '—';
 
         // Streaming locations
@@ -300,7 +334,7 @@
             list.appendChild(empty);
           } else {
             locations.forEach(function (location) {
-              var url  = location.url || '#';
+              var url = location.url || '#';
               var name = location.streamingServiceName || url;
               var a = document.createElement('a');
               a.href = url;

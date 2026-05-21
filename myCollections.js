@@ -48,6 +48,18 @@ Vue.createApp({
         await this.GetMovieCollections();
     },
     methods: {
+        async RemoveMovieFromCollection(collectionId, movieId) {
+            try {
+                await axios.delete(baseUri + "MovieCollection/" + collectionId + "/movies/" + movieId + "/userId/" + localStorage.getItem('firebaseUid'));
+                await this.GetMovieCollections();
+            } catch (ex) {
+                if (ex.response?.status === 403) {
+                    alert('You do not have permission to remove movies from this collection.');
+                } else {
+                    console.log("ERROR:", ex);
+                }
+            }
+        },
         async GetMovieCollections() {
             try {
                 const response = await axios.get(baseUri + "MovieCollection/ByUser/" + localStorage.getItem('firebaseUid'));

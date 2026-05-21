@@ -22,6 +22,8 @@ Vue.createApp({
             movie: null,
             movieCollection: [],
             movieCollectionName: '',
+            menuOpen: false,
+            showCreateCollection: false,
             UserName: localStorage.getItem('username'),
             showSettings: false,
             settingsUsername: '',

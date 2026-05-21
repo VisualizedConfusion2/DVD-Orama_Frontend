@@ -21,6 +21,7 @@ Vue.createApp({
             didYouMean: [],
             movie: null,
             loading: true,  // starts true so table waits for data
+            menuOpen: false,
             UserName: localStorage.getItem('username'),
             searchTitle: '',
             showSettings: false,
@@ -42,16 +43,27 @@ Vue.createApp({
             settingsSaving: false,
         }
     },
-        async created() {
-            await loadMovieModalHTML();
-            initMovieModal();
-            await this.getMovies(baseUri + "movie");
-            await this.loadGenres();
-            await this.loadStreamingServices();
-        },
+    async created() {
+        await loadMovieModalHTML();
+        initMovieModal();
+        await this.getMovies(baseUri + "movie");
+        await this.loadGenres();
+        await this.loadStreamingServices();
+    },
+    mounted() {
+        document.addEventListener('click', this.handleOutsideClick);
+    },
+    unmounted() {
+        document.removeEventListener('click', this.handleOutsideClick);
+    },
     methods: {
         getAllMovies() {
             this.getMovies(baseUri + "movie");
+        },
+        handleOutsideClick(e) {
+            if (this.$refs.userMenuRef && !this.$refs.userMenuRef.contains(e.target)) {
+                this.menuOpen = false;
+            }
         },
         async getMovies(uri) {
             this.loading = true;

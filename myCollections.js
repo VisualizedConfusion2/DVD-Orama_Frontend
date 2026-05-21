@@ -9,9 +9,11 @@ import {
     EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
+import { loadMovieModalHTML, initMovieModal } from "./movieModal.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+window.baseUri = baseUri;
 
 Vue.createApp({
     data() {
@@ -41,6 +43,8 @@ Vue.createApp({
             window.location.href = 'Log-in.html';
             return;
         }
+        await loadMovieModalHTML();
+        initMovieModal();
         await this.GetMovieCollections();
     },
     methods: {

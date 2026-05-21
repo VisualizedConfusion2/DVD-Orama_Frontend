@@ -1025,6 +1025,52 @@ footer, .cinema-footer {
     border-color: var(--gold);
     background: rgba(201, 168, 76, 0.08);
 }
+.modal-backdrop + .modal-backdrop {
+    z-index: 1060;
+}
+
+#trailerModal {
+    z-index: 1070;
+}
+.poster-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin: 0 auto 1rem auto;
+}
+
+.poster-container img {
+    display: block;
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    transition: filter 0.3s;
+}
+
+.poster-container:hover img {
+    filter: brightness(0.5);
+}
+
+.poster-play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    color: var(--gold);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.poster-container:hover .poster-play-overlay {
+    opacity: 1;
 
 
 

@@ -9,10 +9,11 @@ import {
     EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
+import { loadMovieModalHTML, initMovieModal } from "./movieModal.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-
+window.baseUri = baseUri;
 Vue.createApp({
     data() {
         return {
@@ -43,6 +44,8 @@ Vue.createApp({
         }
     },
     async created() {
+        await loadMovieModalHTML();
+        initMovieModal();
         await this.getMovies(baseUri + "movie");
         await this.loadGenres();
         await this.loadStreamingServices();
@@ -51,7 +54,7 @@ Vue.createApp({
         document.addEventListener('click', this.handleOutsideClick);
     },
     unmounted() {
-        ocument.removeEventListener('click', this.handleOutsideClick);
+        document.removeEventListener('click', this.handleOutsideClick);
     },
     methods: {
         getAllMovies() {

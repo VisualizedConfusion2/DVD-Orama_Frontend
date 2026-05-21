@@ -9,10 +9,11 @@ import {
     EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
+import { loadMovieModalHTML, initMovieModal } from "./movieModal.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-
+window.baseUri = baseUri;
 Vue.createApp({
     data() {
         return {
@@ -20,6 +21,7 @@ Vue.createApp({
             didYouMean: [],
             movie: null,
             loading: true,  // starts true so table waits for data
+            menuOpen: false,
             UserName: localStorage.getItem('username'),
             searchTitle: '',
             showSettings: false,
@@ -46,10 +48,18 @@ Vue.createApp({
         }
     },
     async created() {
+        await loadMovieModalHTML();
+        initMovieModal();
         await this.getMovies(baseUri + "movie");
         await this.loadGenres();
         await this.loadStreamingServices();
         await this.GetMovieCollections();
+    },
+    mounted() {
+        document.addEventListener('click', this.handleOutsideClick);
+    },
+    unmounted() {
+        document.removeEventListener('click', this.handleOutsideClick);
     },
     methods: {
         async AddMovieToCollection() {
@@ -81,6 +91,11 @@ Vue.createApp({
         },
         getAllMovies() {
             this.getMovies(baseUri + "movie");
+        },
+        handleOutsideClick(e) {
+            if (this.$refs.userMenuRef && !this.$refs.userMenuRef.contains(e.target)) {
+                this.menuOpen = false;
+            }
         },
         async getMovies(uri) {
             this.loading = true;

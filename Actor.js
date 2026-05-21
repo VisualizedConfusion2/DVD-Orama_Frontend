@@ -9,9 +9,11 @@ import {
     EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
+import { loadMovieModalHTML, initMovieModal } from "./movieModal.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+window.baseUri = baseUri;
 
 Vue.createApp({
     data() {
@@ -23,6 +25,9 @@ Vue.createApp({
         }
     },
     async created() {
+        await loadMovieModalHTML();
+        initMovieModal();
+
         const params = new URLSearchParams(window.location.search);
         this.actorName = params.get('name') || '';
         if (this.actorName) {
@@ -30,9 +35,6 @@ Vue.createApp({
         }
     },
     methods: {
-        goHome() {
-            window.location.href = 'index.html';
-        },
         redirectToLogin() {
             localStorage.removeItem('token');
             localStorage.removeItem('username');

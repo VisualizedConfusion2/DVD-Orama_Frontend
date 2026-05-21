@@ -12,7 +12,7 @@ import { firebaseConfig } from "./firebase-config.js";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-
+window.baseUri = baseUri; // expose for non-module scripts
 Vue.createApp({
     data() {
         return {

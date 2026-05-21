@@ -1001,3 +1001,27 @@ footer, .cinema-footer {
     color: rgba(201, 168, 76, 0.4);
     font-style: italic;
 }
+.did-you-mean {
+    margin: 0.5rem auto;
+    max-width: 900px;
+    text-align: left;
+    color: rgba(201, 168, 76, 0.7);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+}
+
+.suggestion-chip {
+    display: inline-block;
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    color: var(--gold);
+    padding: 0.3rem 0.7rem;
+    margin: 0.3rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.suggestion-chip:hover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.08);
+}

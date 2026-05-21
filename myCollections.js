@@ -51,12 +51,23 @@ Vue.createApp({
                 console.log("ERROR:", ex);
             }
         },
-        CreateMovieCollection(){
-            if(this.movieCollectionName.trim() === '') {
+        UpdateCollectionPublicity(collection, newValue) {
+            axios.put(baseUri + "MovieCollection/" + collection.id + "/userId/" + localStorage.getItem('firebaseUid'), {
+                name: collection.name,
+                isPublic: newValue,
+            }).then(() => {
+                collection.isPublic = newValue; // update local state
+                console.log("Updated successfully:", newValue);
+            }).catch(ex => {
+                console.log("ERROR:", ex);
+            });
+        },
+        CreateMovieCollection() {
+            if (this.movieCollectionName.trim() === '') {
                 alert('Indtast et navn til samlingen');
                 return;
             }
-            else{
+            else {
                 axios.post(baseUri + "MovieCollection/Create", {
                     name: this.movieCollectionName,
                     firebaseUid: localStorage.getItem('firebaseUid'),

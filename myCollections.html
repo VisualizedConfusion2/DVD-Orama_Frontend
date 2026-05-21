@@ -2,160 +2,153 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Collections</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="Stylesheet.css">
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Collections</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="Stylesheet.css">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
-    <div id="app">
-        <!--Start of the navbar-->
-        <div class="topbar">
-            <div class="brand">
-                <a href="/index.html">
-                DVD-Orama
-                </a>
-            </div>
-            <!-- Logged in: show username + separate sign out button -->
-            <div v-if="UserName" class="topbar-actions">
-                <a href="/myCollections.html" class="signin-btn" type="button">
-                    My Collections
-                </a>
-                <button class="signin-btn" type="button" @click="openSettings">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <circle cx="12" cy="8" r="4"></circle>
-                        <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
-                    </svg>
-                    {{ UserName }}
-                </button>
-                <button class="signin-btn signout-btn" type="button" @click="redirectToLogin">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
-                    sign out
-                </button>
-            </div>
+  <div id="app">
+    <!--Start of the navbar-->
+    <div class="topbar">
+      <div class="brand">
+        <a href="/index.html">
+          DVD-Orama
+        </a>
+      </div>
+      <!-- Logged in: show username + separate sign out button -->
+      <div v-if="UserName" class="topbar-actions">
+        <a href="/myCollections.html" class="signin-btn" type="button">
+          My Collections
+        </a>
+        <button class="signin-btn" type="button" @click="openSettings">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"></path>
+          </svg>
+          {{ UserName }}
+        </button>
+        <button class="signin-btn signout-btn" type="button" @click="redirectToLogin">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          sign out
+        </button>
+      </div>
+    </div>
+    <!--End of the navbar-->
+    <!-- Create Collection -->
+    <div
+      style="max-width: 500px; margin: 2rem auto; padding: 2rem; background: #14100c; border: 1px solid rgba(201,168,76,0.2);">
+      <h3 style="margin-bottom: 1.5rem; text-align: center;">New Collection</h3>
+
+      <div style="margin-bottom: 1.2rem;">
+        <label>Collection Name</label>
+        <input v-model="movieCollectionName" type="text" placeholder="Enter collection name..." />
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+        <label style="margin: 0; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+          <input v-model="isPublic" type="checkbox" style="width: auto; accent-color: var(--gold);" />
+          Make Public
+        </label>
+      </div>
+
+      <button @click="CreateMovieCollection" class="btn btn-primary" style="width: 100%;">
+        Create Collection
+      </button>
+    </div>
+
+
+
+    <h2>Collections</h2>
+    <div v-for="collection in movieCollection" :key="collection.movieCollectionId">
+      <h3>{{ collection.name }}</h3>
+      <div class="d-inline-flex">Public: <input type="checkbox" :checked="collection.isPublic"
+          @change="UpdateCollectionPublicity(collection, $event.target.checked)"> </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Poster</th>
+            <th>Title</th>
+            <th>Release Year</th>
+            <th>Duration</th>
+            <th>Find</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(movie, index) in collection.movies" :key="index">
+            <td><img :src="movie.posterUrl" :alt="movie.title" width="80" /></td>
+            <td>{{ movie.title }}</td>
+            <td>{{ movie.publicationYear }}</td>
+            <td>{{ movie.duration }} minutes</td>
+            <td>
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#movieModal"
+                :data-title="movie.title" :data-year="movie.publicationYear" :data-duration="movie.duration"
+                :data-poster="movie.posterUrl" :data-streaming="JSON.stringify(movie.streamingLocations)">
+                Find Movie
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+
+    <!-- User Settings Modal -->
+    <div v-if="showSettings" class="modal-backdrop" @click.self="showSettings = false">
+      <div class="modal-box" style="max-width:460px">
+        <h5 class="mb-4">Brugerindstillinger</h5>
+
+        <div class="form-group">
+          <label>Brugernavn</label>
+          <input v-model="settingsUsername" type="text" class="form-control">
         </div>
-        <!--End of the navbar-->
-        <!-- Create Collection -->
-        <div style="max-width: 500px; margin: 2rem auto; padding: 2rem; background: #14100c; border: 1px solid rgba(201,168,76,0.2);">
-            <h3 style="margin-bottom: 1.5rem; text-align: center;">New Collection</h3>
-            
-            <div style="margin-bottom: 1.2rem;">
-                <label>Collection Name</label>
-                <input 
-                    v-model="movieCollectionName" 
-                    type="text" 
-                    placeholder="Enter collection name..."
-                />
-            </div>
 
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                <label style="margin: 0; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <input 
-                        v-model="isPublic" 
-                        type="checkbox" 
-                        style="width: auto; accent-color: var(--gold);"
-                    />
-                    Make Public
-                </label>
-            </div>
-
-            <button @click="CreateMovieCollection" class="btn btn-primary" style="width: 100%;">
-                Create Collection
-            </button>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input v-model="settingsEmail" type="email" class="form-control">
         </div>
 
+        <hr>
 
-        
-        <h2>Collections</h2>
-        <div v-for="collection in movieCollection" :key="collection.movieCollectionId">
-            <h3>{{ collection.name }}</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Poster</th>
-                        <th>Title</th>
-                        <th>Release Year</th>
-                        <th>Duration</th>
-                        <th>Find</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(movie, index) in collection.movies" :key="index">
-                        <td><img :src="movie.posterUrl" :alt="movie.title" width="80" /></td>
-                        <td>{{ movie.title }}</td>
-                        <td>{{ movie.publicationYear }}</td>
-                        <td>{{ movie.duration }} minutes</td>
-                        <td>
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                data-target="#movieModal" :data-title="movie.title" :data-year="movie.publicationYear"
-                                :data-duration="movie.duration" :data-poster="movie.posterUrl"
-                                :data-streaming="JSON.stringify(movie.streamingLocations)">
-                                Find Movie
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="form-group">
+          <label>Nyt password <span style="color:var(--film-silver);font-size:0.75rem">(lad stå tomt for at
+              beholde nuværende)</span></label>
+          <input v-model="settingsNewPassword" type="password" class="form-control" placeholder="Nyt password">
         </div>
 
-
-
-
-
-        <!-- User Settings Modal -->
-        <div v-if="showSettings" class="modal-backdrop" @click.self="showSettings = false">
-            <div class="modal-box" style="max-width:460px">
-                <h5 class="mb-4">Brugerindstillinger</h5>
-
-                <div class="form-group">
-                    <label>Brugernavn</label>
-                    <input v-model="settingsUsername" type="text" class="form-control">
-                </div>
-
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input v-model="settingsEmail" type="email" class="form-control">
-                </div>
-
-                <hr>
-
-                <div class="form-group">
-                    <label>Nyt password <span style="color:var(--film-silver);font-size:0.75rem">(lad stå tomt for at
-                            beholde nuværende)</span></label>
-                    <input v-model="settingsNewPassword" type="password" class="form-control"
-                        placeholder="Nyt password">
-                </div>
-
-                <div class="form-group">
-                    <label>Nuværende password <span style="color:var(--film-silver);font-size:0.75rem">(kræves ved
-                            ændring af email eller password)</span></label>
-                    <input v-model="settingsCurrentPassword" type="password" class="form-control"
-                        placeholder="Dit nuværende password">
-                </div>
-
-                <p v-if="settingsError" class="text-danger">{{ settingsError }}</p>
-                <p v-if="settingsSuccess" class="text-success">{{ settingsSuccess }}</p>
-
-                <div style="display:flex;gap:0.75rem;margin-top:1rem">
-                    <button @click="saveSettings" class="btn btn-primary" :disabled="settingsSaving">
-                        {{ settingsSaving ? 'Gemmer…' : 'Gem ændringer' }}
-                    </button>
-                    <button @click="showSettings = false" class="btn"
-                        style="background:transparent;color:var(--film-silver);border:1px solid rgba(200,192,180,0.3)">
-                        Annuller
-                    </button>
-                </div>
-            </div>
+        <div class="form-group">
+          <label>Nuværende password <span style="color:var(--film-silver);font-size:0.75rem">(kræves ved
+              ændring af email eller password)</span></label>
+          <input v-model="settingsCurrentPassword" type="password" class="form-control"
+            placeholder="Dit nuværende password">
         </div>
-        <!-- ✅ Modal is now OUTSIDE the <table> so the DOM stays valid -->
+
+        <p v-if="settingsError" class="text-danger">{{ settingsError }}</p>
+        <p v-if="settingsSuccess" class="text-success">{{ settingsSuccess }}</p>
+
+        <div style="display:flex;gap:0.75rem;margin-top:1rem">
+          <button @click="saveSettings" class="btn btn-primary" :disabled="settingsSaving">
+            {{ settingsSaving ? 'Gemmer…' : 'Gem ændringer' }}
+          </button>
+          <button @click="showSettings = false" class="btn"
+            style="background:transparent;color:var(--film-silver);border:1px solid rgba(200,192,180,0.3)">
+            Annuller
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- ✅ Modal is now OUTSIDE the <table> so the DOM stays valid -->
     <!-- Modal outside #app to avoid Vue/Bootstrap DOM conflict -->
     <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel"
       aria-hidden="true">
@@ -191,13 +184,13 @@
     </div>
 
 
-    </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script type="module" src="myCollections.js"></script>
-    <!-- Bootstrap 4 JS bundle (includes Popper) — required for modals to work -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script type="module" src="myCollections.js"></script>
+  <!-- Bootstrap 4 JS bundle (includes Popper) — required for modals to work -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
     $(document).ready(function () {
       $('#movieModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);

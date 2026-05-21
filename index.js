@@ -63,7 +63,11 @@ Vue.createApp({
                 this.selectedCollectionId = '';
                 await this.GetMovieCollections();
             } catch (ex) {
-                console.log("ERROR:", ex);
+                if (ex.response?.status === 404) {
+                    alert('This movie is already in that collection!');
+                } else {
+                    console.log("ERROR:", ex);
+                }
             }
         },
         async GetMovieCollections() {

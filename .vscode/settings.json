@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/2a41861f-30b5-48d4-a370-de635da86b91/resourceGroups/appsvc_linux_swedencentral/providers/Microsoft.Web/sites/DVD-Orama",
+    "appService.deploySubpath": "."
+}
